@@ -1,0 +1,50 @@
+# Efficiency Modification E1 (Conservative): YOLOv12n + A2C2fRep in backbone
+# ===========================================================================
+# Base: official yolo12.yaml
+# Change: A2C2f (area-attention) at backbone layers 6 and 8 replaced with
+#         A2C2fRep (RepConv-based, attention removed). Neck A2C2f kept for now.
+#
+# Rationale: backbone A2C2f blocks operate on the deepest feature maps and are
+# the primary attention memory-access bottleneck on Maxwell (Jetson Nano).
+# Replacing them with re-parameterizable conv removes the FlashAttention
+# dependency (unavailable on Maxwell) while preserving representational
+# capacity. Conservative: neck attention retained to protect accuracy;
+# escalate to neck replacement (E2) only if FPS < 15.
+#
+# A2C2fRep must be registered before loading (see register_rep.py).
+
+nc: 5 # dead, healthy, mismanaged, smallish, yellowish
+scales:
+  n: [0.50, 0.25, 1024]
+  s: [0.50, 0.50, 1024]
+  m: [0.50, 1.00, 512]
+  l: [1.00, 1.00, 512]
+  x: [1.00, 1.50, 512]
+
+# YOLOv12n backbone (E1: A2C2f -> A2C2fRep at layers 6, 8)
+backbone:
+  - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2
+  - [-1, 1, Conv, [128, 3, 2]] # 1-P2/4
+  - [-1, 2, C3k2, [256, False, 0.25]]
+  - [-1, 1, Conv, [256, 3, 2]] # 3-P3/8
+  - [-1, 2, C3k2, [512, False, 0.25]]
+  - [-1, 1, Conv, [512, 3, 2]] # 5-P4/16
+  - [-1, 4, A2C2fRep, [512, True, 4]] # 6   <-- MODIFIED (was A2C2f)
+  - [-1, 1, Conv, [1024, 3, 2]] # 7-P5/32
+  - [-1, 4, A2C2fRep, [1024, True, 1]] # 8  <-- MODIFIED (was A2C2f)
+
+# YOLOv12n head (neck A2C2f kept for conservative variant)
+head:
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
+  - [[-1, 6], 1, Concat, [1]] # cat backbone P4
+  - [-1, 2, A2C2f, [512, False, -1]] # 11
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
+  - [[-1, 4], 1, Concat, [1]] # cat backbone P3
+  - [-1, 2, A2C2f, [256, False, -1]] # 14
+  - [-1, 1, Conv, [256, 3, 2]]
+  - [[-1, 11], 1, Concat, [1]] # cat head P4
+  - [-1, 2, A2C2f, [512, False, -1]] # 17
+  - [-1, 1, Conv, [512, 3, 2]]
+  - [[-1, 8], 1, Concat, [1]] # cat head P5
+  - [-1, 2, C3k2, [1024, True]] # 20 (P5/32-large)
+  - [[14, 17, 20], 1, Detect, [nc]] # Detect(P3, P4, P5)

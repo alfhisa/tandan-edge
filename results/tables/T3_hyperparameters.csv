@@ -1,0 +1,35 @@
+Stage,Setting,Value
+Training,Epochs,150
+Training,Early-stopping patience,50
+Training,Batch size,16
+Training,Training resolution (final model),768
+Training,Training resolutions studied,"640, 704, 768"
+Training,Optimizer,auto
+Training,Initial learning rate,0.01
+Training,Final LR factor,0.01
+Training,Momentum,0.937
+Training,Weight decay,0.0005
+Training,Warm-up epochs,3.0
+Training,Cosine LR,false
+Training,Mosaic probability,1.0
+Training,Close mosaic (last epochs),10
+Training,Mixup,0.0
+Training,HSV hue,0.015
+Training,HSV saturation,0.7
+Training,HSV value,0.4
+Training,Rotation (deg),0.0
+Training,Translate,0.1
+Training,Scale,0.5
+Training,Horizontal flip,0.5
+Training,Vertical flip,0.0
+Training,Mixed precision (AMP),true
+Training,Pretrained weights,"yolo11n.pt (COCO-pretrained, Ultralytics)"
+Training,Seeds,"42, 123, 456"
+Evaluation,Weights,best.pt (highest validation fitness)
+Evaluation,Batch / conf / IoU (NMS),16 / 0.001 / 0.7
+Evaluation,Confusion matrix thresholds,"conf 0.25, IoU 0.45"
+Evaluation,Precision,FP32 and FP16 (PyTorch half)
+Export,ONNX,"opset 12, simplified, static batch 1, input 1×3×S×S"
+Export,TensorRT build,"trtexec --fp16 (also FP32, INT8 without calibration), workspace 2048 MB"
+Benchmark,trtexec timing,"avgRuns 100, percentile 95; sustained test --duration 1800 s"
+Benchmark,Thermal logging,"tegrastats, 1 s interval"

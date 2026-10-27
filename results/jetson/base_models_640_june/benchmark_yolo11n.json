@@ -1,0 +1,14 @@
+{
+  "fps_mean": 20.25,
+  "latency_min_ms": 49.1592,
+  "latency_max_ms": 50.8008,
+  "latency_mean_ms": 49.3772,
+  "latency_median_ms": 49.3237,
+  "latency_p99_ms": 50.7207,
+  "gpu_compute_mean_ms": 48.8579,
+  "fps_p95": 19.72,
+  "realtime_capable": true,
+  "model": "yolo11n",
+  "precision": "FP16",
+  "hardware": "Jetson Nano 4GB"
+}

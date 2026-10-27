@@ -1,0 +1,16 @@
+# Training / evaluation server (versions used for every result in the paper)
+# Python 3.8.10, NVIDIA Quadro RTX 6000, driver 450.248
+#
+# Install PyTorch first with the CUDA 11.7 wheel index:
+#   pip install torch==2.0.1 torchvision==0.15.2 --index-url https://download.pytorch.org/whl/cu117
+# then:
+#   pip install -r requirements.txt
+
+ultralytics==8.4.48
+numpy
+pandas
+scipy
+matplotlib
+thop
+onnx
+onnxsim

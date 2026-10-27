@@ -1,0 +1,13 @@
+torch 1.11.0a0+gitbc2c6ed | device NVIDIA Tegra X1
+weights onnx_models/best.pt | image site_2_only_dataset/val/images/44000_16000_1013_87.jpg 
+
+YOLO11n-base summary (fused): 101 layers, 2,583,127 parameters, 0 gradients, 6.3 GFLOPs
+fp32   640  model  162.33 ms ( 6.16 FPS)   e2e  211.91 ms ( 4.72 FPS)
+fp32   704  model  196.10 ms ( 5.10 FPS)   e2e  247.74 ms ( 4.04 FPS)
+fp32   768  model  235.69 ms ( 4.24 FPS)   e2e  290.52 ms ( 3.44 FPS)
+YOLO11n-base summary (fused): 101 layers, 2,583,127 parameters, 0 gradients, 6.3 GFLOPs
+fp16   640  model  175.11 ms ( 5.71 FPS)   e2e  223.57 ms ( 4.47 FPS)
+fp16   704  model  206.04 ms ( 4.85 FPS)   e2e  256.43 ms ( 3.90 FPS)
+fp16   768  model  244.12 ms ( 4.10 FPS)   e2e  295.01 ms ( 3.39 FPS)
+
+Selesai -> pytorch_benchmark.csv
