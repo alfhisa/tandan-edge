@@ -1,0 +1,69 @@
+{
+  "experiment": "R1_scshead",
+  "run_name": "R1_scshead_seed42",
+  "seed": 42,
+  "epochs": 150,
+  "config": "tandan-r1-scshead.yaml",
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9836,
+  "macro_mAP50_95": 0.9156,
+  "minority_recall": 0.9778,
+  "minority_AP50": 0.9829,
+  "export_onnx_ok": true,
+  "background_fp": {
+    "bg_fp_total_abs": 632.0,
+    "bg_as_dead_frac": 0.012658227848101266,
+    "bg_as_healthy_frac": 0.6408227848101266,
+    "bg_as_mismanaged_frac": 0.02531645569620253,
+    "bg_as_smallish_frac": 0.3037974683544304,
+    "bg_as_yellowish_frac": 0.01740506329113924,
+    "dominant_fp_class": "healthy"
+  },
+  "profile": {
+    "params_M": 2.261,
+    "GFLOPs": 6.03,
+    "gpu_fps": 132.2
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.985,
+      "AP@.5:.95": 0.947,
+      "Precision": 0.9576,
+      "Recall": 0.9836
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.9845,
+      "AP@.5:.95": 0.9702,
+      "Precision": 0.9929,
+      "Recall": 0.9761
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.9899,
+      "AP@.5:.95": 0.8018,
+      "Precision": 0.9857,
+      "Recall": 0.9789
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9846,
+      "AP@.5:.95": 0.9204,
+      "Precision": 0.9927,
+      "Recall": 0.9739
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9739,
+      "AP@.5:.95": 0.9382,
+      "Precision": 0.9828,
+      "Recall": 0.9708
+    }
+  ]
+}

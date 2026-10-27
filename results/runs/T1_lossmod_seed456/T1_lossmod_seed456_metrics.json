@@ -1,0 +1,74 @@
+{
+  "experiment": "T1_lossmod",
+  "run_name": "T1_lossmod_seed456",
+  "seed": 456,
+  "epochs": 150,
+  "cui_beta": 0.999,
+  "focal_gamma": 2.0,
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9939,
+  "macro_mAP50_95": 0.9621,
+  "minority_recall": 0.9911,
+  "minority_AP50": 0.9937,
+  "background_fp": {
+    "bg_fp_total_abs": 2444.0,
+    "bg_as_dead_abs": 7.0,
+    "bg_as_dead_frac": 0.0028641571194762683,
+    "bg_as_healthy_abs": 1272.0,
+    "bg_as_healthy_frac": 0.5204582651391162,
+    "bg_as_mismanaged_abs": 60.0,
+    "bg_as_mismanaged_frac": 0.024549918166939442,
+    "bg_as_smallish_abs": 1040.0,
+    "bg_as_smallish_frac": 0.425531914893617,
+    "bg_as_yellowish_abs": 65.0,
+    "bg_as_yellowish_frac": 0.026595744680851064,
+    "dominant_fp_class": "healthy"
+  },
+  "profile": {
+    "params_M": 2.583,
+    "GFLOPs": 6.32,
+    "gpu_fps": 147.0
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.995,
+      "AP@.5:.95": 0.9899,
+      "Precision": 0.9882,
+      "Recall": 1.0
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.9948,
+      "AP@.5:.95": 0.9891,
+      "Precision": 0.9901,
+      "Recall": 0.9948
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.9937,
+      "AP@.5:.95": 0.8994,
+      "Precision": 0.9751,
+      "Recall": 0.9789
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9937,
+      "AP@.5:.95": 0.9555,
+      "Precision": 0.9911,
+      "Recall": 0.9739
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9925,
+      "AP@.5:.95": 0.9769,
+      "Precision": 0.9715,
+      "Recall": 0.9944
+    }
+  ]
+}

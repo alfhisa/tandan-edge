@@ -1,0 +1,69 @@
+{
+  "experiment": "R2_simam",
+  "run_name": "R2_simam_seed42",
+  "seed": 42,
+  "epochs": 150,
+  "config": "tandan-r2-simam.yaml",
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9934,
+  "macro_mAP50_95": 0.9501,
+  "minority_recall": 0.9941,
+  "minority_AP50": 0.9925,
+  "export_onnx_ok": true,
+  "background_fp": {
+    "bg_fp_total_abs": 664.0,
+    "bg_as_dead_frac": 0.0030120481927710845,
+    "bg_as_healthy_frac": 0.6265060240963856,
+    "bg_as_mismanaged_frac": 0.018072289156626505,
+    "bg_as_smallish_frac": 0.32831325301204817,
+    "bg_as_yellowish_frac": 0.024096385542168676,
+    "dominant_fp_class": "healthy"
+  },
+  "profile": {
+    "params_M": 2.583,
+    "GFLOPs": 6.32,
+    "gpu_fps": 142.4
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.995,
+      "AP@.5:.95": 0.9846,
+      "Precision": 0.9866,
+      "Recall": 1.0
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.9949,
+      "AP@.5:.95": 0.9873,
+      "Precision": 0.9956,
+      "Recall": 0.9935
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.9884,
+      "AP@.5:.95": 0.8559,
+      "Precision": 0.9578,
+      "Recall": 0.9895
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9944,
+      "AP@.5:.95": 0.9451,
+      "Precision": 0.996,
+      "Recall": 0.9662
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9941,
+      "AP@.5:.95": 0.9775,
+      "Precision": 0.9737,
+      "Recall": 0.9927
+    }
+  ]
+}

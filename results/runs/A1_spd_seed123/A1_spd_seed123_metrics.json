@@ -1,0 +1,62 @@
+{
+  "experiment": "A1",
+  "run_name": "A1_spd_seed123",
+  "description": "YOLOv12n + SPD-Conv (backbone P3,P4,P5)",
+  "config_file": "yolo12n-spd.yaml",
+  "seed": 123,
+  "epochs": 150,
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9948,
+  "macro_mAP50_95": 0.9745,
+  "minority_recall": 0.9977,
+  "minority_AP50": 0.9949,
+  "profile": {
+    "model_size_mb": 8.41,
+    "params_M": 3.995,
+    "GFLOPs": 9.86,
+    "gpu_latency_ms": 11.49,
+    "gpu_fps": 87.0
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.995,
+      "AP@.5:.95": 0.9919,
+      "Precision": 0.9913,
+      "Recall": 1.0
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.9949,
+      "AP@.5:.95": 0.9925,
+      "Precision": 0.9934,
+      "Recall": 0.9962
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.9949,
+      "AP@.5:.95": 0.9385,
+      "Precision": 0.9845,
+      "Recall": 1.0
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9946,
+      "AP@.5:.95": 0.9653,
+      "Precision": 0.9944,
+      "Recall": 0.9891
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9947,
+      "AP@.5:.95": 0.9841,
+      "Precision": 0.9855,
+      "Recall": 0.993
+    }
+  ]
+}

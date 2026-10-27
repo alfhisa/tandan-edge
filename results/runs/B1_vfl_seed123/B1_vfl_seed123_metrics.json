@@ -1,0 +1,79 @@
+{
+  "experiment": "B1_vfl",
+  "run_name": "B1_vfl_seed123",
+  "seed": 123,
+  "epochs": 150,
+  "vfl_alpha": 0.75,
+  "vfl_gamma": 2.0,
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9853,
+  "macro_mAP50_95": 0.9614,
+  "minority_recall": 0.9819,
+  "minority_AP50": 0.9856,
+  "background_fp": {
+    "background_col_total": 1675.0,
+    "bg_as_dead": 15.0,
+    "bg_as_dead_frac": 0.008955223880597015,
+    "bg_as_healthy": 876.0,
+    "bg_as_healthy_frac": 0.5229850746268657,
+    "bg_as_mismanaged": 59.0,
+    "bg_as_mismanaged_frac": 0.03522388059701492,
+    "bg_as_smallish": 667.0,
+    "bg_as_smallish_frac": 0.3982089552238806,
+    "bg_as_yellowish": 58.0,
+    "bg_as_yellowish_frac": 0.03462686567164179,
+    "bg_as_background": 0.0,
+    "bg_as_background_frac": 0.0,
+    "dominant_fp_class": "healthy",
+    "dominant_fp_frac": 0.5229850746268657,
+    "total_bg_fp_frac": 1.0
+  },
+  "profile": {
+    "model_size_mb": 5.53,
+    "params_M": 2.558,
+    "GFLOPs": 6.32,
+    "gpu_fps": 89.0
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.985,
+      "AP@.5:.95": 0.9775,
+      "Precision": 0.9641,
+      "Recall": 0.9836
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.9849,
+      "AP@.5:.95": 0.9816,
+      "Precision": 0.9912,
+      "Recall": 0.9798
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.994,
+      "AP@.5:.95": 0.9205,
+      "Precision": 0.9894,
+      "Recall": 0.9864
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9847,
+      "AP@.5:.95": 0.9583,
+      "Precision": 0.9921,
+      "Recall": 0.9802
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9778,
+      "AP@.5:.95": 0.9692,
+      "Precision": 0.9823,
+      "Recall": 0.9757
+    }
+  ]
+}

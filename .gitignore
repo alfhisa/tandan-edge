@@ -1,7 +1,7 @@
 # data and generated outputs
-datasets/
-runs/
-deploy/
+/datasets/
+/runs/
+/deploy/
 results/figures/
 results/reeval/log/
 *.pt
