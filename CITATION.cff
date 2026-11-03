@@ -4,6 +4,7 @@ title: "tandan-edge: A resolution-decoupled training and deployment workflow for
 type: software
 version: 1.0.0
 date-released: 2026-11-03
+doi: 10.5281/zenodo.23913151
 authors:
   - family-names: Saputra
     given-names: Muhammad Alfhi

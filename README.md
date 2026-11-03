@@ -1,5 +1,7 @@
 # tandan-edge
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23913150.svg)](https://doi.org/10.5281/zenodo.23913150)
+
 **A resolution-decoupled training and deployment workflow for lightweight oil palm condition detectors on low-power edge hardware.**
 
 Code, configurations, per-run records and on-device measurements for a
