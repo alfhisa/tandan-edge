@@ -8,6 +8,8 @@ results/reeval/log/
 *.onnx
 *.engine
 !weights/README.md
+!weights/tandan-edge_yolo11n_train768.pt
+!weights/tandan-edge_yolo11n_train768_704.onnx
 
 # python
 __pycache__/

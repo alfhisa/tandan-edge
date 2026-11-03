@@ -1,8 +1,8 @@
 # Weights
 
-Checkpoints are not stored in git. Download them from the
-[GitHub release](https://github.com/<github-user>/tandan-edge/releases) of this
-repository and place them here.
+The final model and its 704 px ONNX export are included in this folder
+(they are also attached to the
+[GitHub release](https://github.com/alfhisa/tandan-edge/releases)).
 
 | File | What it is | Used by |
 |---|---|---|

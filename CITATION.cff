@@ -1,13 +1,24 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below (the article reference will be added on publication)."
-title: "tandan-edge: train high, deploy at the real-time resolution — oil palm condition detection with YOLO11n on a Jetson Nano"
+title: "tandan-edge: A resolution-decoupled training and deployment workflow for lightweight oil palm condition detectors on low-power edge hardware"
 type: software
+version: 1.0.0
+date-released: 2026-11-03
 authors:
   - family-names: Saputra
     given-names: Muhammad Alfhi
     affiliation: "Bina Nusantara University"
+  - family-names: Soeparno
+    given-names: Haryono
+    affiliation: "Bina Nusantara University"
+  - family-names: Arifin
+    given-names: Yulyani
+    affiliation: "Bina Nusantara University"
+  - family-names: Budiharto
+    given-names: Widodo
+    affiliation: "Bina Nusantara University"
 license: AGPL-3.0
-repository-code: "https://github.com/<github-user>/tandan-edge"
+repository-code: "https://github.com/alfhisa/tandan-edge"
 keywords:
   - oil palm
   - UAV

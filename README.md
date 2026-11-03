@@ -1,9 +1,9 @@
 # tandan-edge
 
-**Train high, deploy at the real-time resolution: oil palm condition detection with YOLO11n on a Jetson Nano.**
+**A resolution-decoupled training and deployment workflow for lightweight oil palm condition detectors on low-power edge hardware.**
 
 Code, configurations, per-run records and on-device measurements behind the
-MethodsX article *[title — to be added on acceptance]*. Part of TANDAN
+MethodsX article *A resolution-decoupled training and deployment workflow for lightweight oil palm condition detectors on low-power edge hardware* (under review). Part of TANDAN
 (Technology for Affordable Near-field Drone-based Assessment of oil palm plantations).
 
 ![Graphical abstract](docs/graphical_abstract.png)
@@ -46,7 +46,7 @@ tandan-edge/
 │   └── paper/               rebuild every data table and figure from results/
 ├── jetson/                  TensorRT, PyTorch and thermal benchmarks on the Jetson Nano
 ├── results/                 the numbers reported in the paper (see "Where each number comes from")
-├── weights/                 checkpoints (downloaded from the release, not in git)
+├── weights/                 checkpoints (final model included; also attached to the release)
 └── docs/
 ```
 
@@ -59,7 +59,7 @@ tandan-edge/
 | Install | [`requirements.txt`](requirements.txt) | [`requirements-jetson.txt`](requirements-jetson.txt), [`jetson/README.md`](jetson/README.md) |
 
 ```bash
-git clone https://github.com/<github-user>/tandan-edge.git
+git clone https://github.com/alfhisa/tandan-edge.git
 cd tandan-edge
 python3 -m venv .venv && source .venv/bin/activate
 pip install torch==2.0.1 torchvision==0.15.2 --index-url https://download.pytorch.org/whl/cu117
@@ -95,8 +95,8 @@ prints image and box counts per split; compare them with the numbers above.
 
 ## Use the trained model
 
-Download `tandan-edge_yolo11n_train768.pt` from the
-[release](https://github.com/<github-user>/tandan-edge/releases) into `weights/`, then
+The final model is included as `weights/tandan-edge_yolo11n_train768.pt`
+(also attached to the [release](https://github.com/alfhisa/tandan-edge/releases)):
 
 ```python
 from ultralytics import YOLO
