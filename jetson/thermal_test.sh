@@ -1,7 +1,6 @@
 #!/bin/bash
 # ==============================================================================
 # thermal_test.sh — sustained inference + temperature logging on the Jetson Nano
-# (originally thermal_30min.sh; Table 8 / Fig. 6)
 # ==============================================================================
 # Runs tegrastats alongside continuous TensorRT inference of the deployed
 # configuration (704 px, FP16) to check for:
@@ -28,7 +27,7 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"
 TRTEXEC="/usr/src/tensorrt/bin/trtexec"
 ENGINE="${ENGINE:-$REPO/deploy/engines/r704_fp16.engine}"
 OUT_DIR="$REPO/results/jetson/${OUT_NAME:-thermal_30min}"
-STRESS_DURATION="${STRESS_DURATION:-1800}"   # seconds of continuous inference (paper: 1800 and 300)
+STRESS_DURATION="${STRESS_DURATION:-1800}"   # seconds of continuous inference (1800 and 300 were used)
 TEGRA_INTERVAL=1000                          # ms between tegrastats samples
 
 mkdir -p "$OUT_DIR"

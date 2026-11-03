@@ -1,36 +1,13 @@
 """
-varifocal_loss.py — Varifocal Loss (VFL) as a drop-in BCE replacement
-======================================================================
-Reference:
-  Zhang, Wang, Dayoub, Sunderhauf (2021), "VarifocalNet: An IoU-aware Dense
-  Object Detector", CVPR 2021 (oral). arXiv:2008.13367
+varifocal_loss.py — Varifocal Loss (VFL) as a drop-in replacement for BCE (B1).
 
-Motivation (BAE-YOLOv12n / Journal 1):
-  Baseline confusion matrix shows 69% of background regions are falsely
-  detected as "healthy" (and 27% as "smallish"). This is a foreground-
-  background discrimination failure, NOT inter-class confusion. Plain BCE
-  (and symmetric Focal Loss, used in the prior ICITEE paper) treats positives
-  and negatives the same way. VFL is ASYMMETRIC:
-    - positives are weighted by their IoU-aware target q (soft label)
-    - negatives (background, q=0) are down-weighted by p^gamma
-  This explicitly trains the detector to push background confidence down,
-  directly attacking the 69% false-positive problem. Training-time only:
-  zero added inference FLOPs (identical inference graph to baseline).
+Positives are weighted by their IoU-aware target q and background negatives
+are down-weighted by alpha * p^gamma, which pushes background confidence down.
+Replaces self.bce in Ultralytics v8DetectionLoss with the same call signature
+(pred_logits, target_scores) -> per-element loss, reduction="none".
+Training-time only: the inference graph is unchanged.
 
-Design (why this is a clean drop-in):
-  In Ultralytics v8DetectionLoss.__call__, the classification loss is:
-      bce_loss = self.bce(pred_scores, target_scores)   # (bs, anchors, nc)
-      loss[1]  = bce_loss.sum() / target_scores_sum
-  where:
-    - pred_scores    : raw logits (BCEWithLogitsLoss applies sigmoid internally)
-    - target_scores  : IoU-aware SOFT labels from the Task-Aligned Assigner
-                       (0 for background, in (0,1] for positives)
-  VFL needs exactly these two tensors. By replacing self.bce with a VFL module
-  that has the SAME call signature (pred_logits, target) -> per-element loss of
-  shape (bs, anchors, nc) and reduction="none", we swap the loss WITHOUT
-  touching __call__ at all. target_scores already serves as VFL's q.
-
-Python 3.8 compatible.
+Reference: Zhang et al., VarifocalNet, CVPR 2021. Python 3.8 compatible.
 """
 
 import torch
@@ -96,10 +73,7 @@ class VarifocalLossWithClassWeights(nn.Module):
     VFL variant that also supports per-class weighting (in case the existing
     self.class_weights path in the modified loss.py should be preserved).
 
-    NOTE: In BAE-YOLOv12n we intend VFL to REPLACE the inter-class weighting
-    strategy of the ICITEE paper (different axis: background vs inter-class).
-    This variant is provided only if you want to keep class_weights active
-    alongside VFL for an ablation. Default pipeline uses plain VarifocalLoss.
+    Provided for ablations only; the reported runs use plain VarifocalLoss.
     """
 
     def __init__(self, alpha: float = 0.75, gamma: float = 2.0):

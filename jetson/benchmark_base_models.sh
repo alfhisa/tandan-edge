@@ -1,7 +1,7 @@
 #!/bin/bash
 # ==============================================================================
 # benchmark_base_models.sh — TensorRT FP16 speed of the 4 base detectors @640
-# (Table 4, column "Jetson FPS"; logs in results/jetson/base_models_640/)
+# (logs in results/jetson/base_models_640/)
 # ==============================================================================
 # Same trtexec call that produced the 27 Oct 2026 logs (first line of each log):
 #   trtexec --onnx=<model>_640.onnx --fp16 --workspace=1024 \

@@ -1,10 +1,9 @@
 """
 export_base_models_onnx.py — Export the 4 base detectors to ONNX at 640 px
 ==========================================================================
-(originally `exp-journal-1/jetson_deployment/scripts/export_to_onnx.py`)
 
 Exports YOLOv8n, YOLO11n, YOLO12n and YOLO26n (from train_base_models.py) for
-the Jetson speed comparison in Table 4 (jetson/benchmark_base_models.sh).
+the Jetson speed comparison (jetson/benchmark_base_models.sh).
 Throughput does not depend on the weights; the seeds below are the ones used.
 YOLO26n exports, but TensorRT 8.2 cannot parse its ONNX graph (Mod operator).
 

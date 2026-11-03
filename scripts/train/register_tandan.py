@@ -1,20 +1,15 @@
 """
-register_tandan.py — Register modul TANDAN-YOLO ke Ultralytics
-===============================================================
-Inject modul kustom + patch parse_model via frozenset trick, TANPA menyentuh
-package ultralytics.
+register_tandan.py — register the custom modules (R1-R3) with Ultralytics.
 
-Modul terdaftar:
-  - TandanDetect (K2 / R1 — SCS-Head)  [DIGUGURKAN setelah R1, tetap tersedia]
-  - C3k2SimAM    (K1 / R2 — attention parameter-free)
-  - BiFPNConcat  (K3 / R3 — weighted fusion, ditambahkan di R3)
+Adds TandanDetect (SCS-Head, R1), C3k2SimAM (R2) and BiFPNConcat (R3) to the
+Ultralytics model parser without modifying the installed package.
 
 Usage:
     from register_tandan import register_all
     register_all()
     model = YOLO("model_configs/tandan-r2-simam.yaml")
 
-CLI (build + forward + export ONNX opset 12 sebagai gate):
+CLI check (build, forward pass and ONNX opset 12 export):
     python scripts/train/register_tandan.py --config model_configs/tandan-r2-simam.yaml
 
 Python 3.8 compatible.
@@ -46,7 +41,7 @@ def register_all(verbose: bool = True):
                   "C3k2SimAM": C3k2SimAM,
                   "SimAM": SimAM}
 
-    # Modul opsional (ada setelah R3 diimplementasikan)
+    # Optional module (available from R3 onwards)
     try:
         from custom_modules.tandan_bifpn import BiFPNConcat
         registered["BiFPNConcat"] = BiFPNConcat
@@ -67,9 +62,9 @@ def register_all(verbose: bool = True):
 
 def _patch_parse(_tasks, verbose=True):
     """
-    parse_model memeriksa keanggotaan modul di beberapa frozenset internal
-    (base_modules, repeat_modules, head sets). Kita bungkus frozenset agar
-    modul kustom otomatis ikut ke set yang memuat kelas induknya.
+    parse_model checks module membership in several internal frozensets
+    (base_modules, repeat_modules, head sets). Wrapping them lets each custom
+    module join the sets that contain its parent class.
     """
     from custom_modules.tandan_head import TandanDetect
     from custom_modules.tandan_simam import C3k2SimAM
@@ -95,7 +90,7 @@ def _patch_parse(_tasks, verbose=True):
         return orig_fs(set(s) | add) if add else s
 
     def _rename_bifpn(d):
-        """Ganti string 'BiFPNConcat' -> 'Concat' di YAML dict. Return True bila ada."""
+        """Replace 'BiFPNConcat' with 'Concat' in a YAML dict. Returns True if any was found."""
         found = False
         for sec in ("backbone", "head"):
             for layer in d.get(sec, []):
@@ -107,10 +102,10 @@ def _patch_parse(_tasks, verbose=True):
 
     def patched(d, ch, verbose=True):
         builtins.frozenset = smart_fs
-        # parse_model cek channel Concat via `m is Concat` (identity, bukan set),
-        # jadi frozenset trick tidak cukup. Tukar simbol Concat di namespace
-        # tasks selama pemanggilan supaya BiFPNConcat lolos cek identitas dan
-        # c2 = sum(ch[x] for x in f) terhitung benar.
+        # parse_model checks Concat by identity (`m is Concat`), not via a set,
+        # so the frozenset trick is not enough. Concat is swapped in the tasks
+        # namespace during the call so that BiFPNConcat passes the identity check
+        # and c2 = sum(ch[x] for x in f) is computed correctly.
         swapped = False
         orig_concat = None
         if BiFPNConcat is not None and _rename_bifpn(d):
@@ -130,7 +125,7 @@ def _patch_parse(_tasks, verbose=True):
 
 
 def gate_check(cfg_path):
-    """Build -> forward -> export ONNX opset 12. Gate wajib sebelum training."""
+    """Build, run a forward pass and export to ONNX opset 12 (check before training)."""
     import torch
     from ultralytics import YOLO
 
@@ -146,9 +141,9 @@ def gate_check(cfg_path):
         _ = model.model(torch.zeros(1, 3, 640, 640))
     print("  Forward OK")
 
-    print("\n  Export ONNX opset 12...")
+    print("\n  Exporting ONNX opset 12...")
     model.export(format="onnx", imgsz=640, opset=12, simplify=True, dynamic=False)
-    print("  Export OK -- TensorRT-ready secara struktural")
+    print("  Export OK -- structurally TensorRT-ready")
 
 
 if __name__ == "__main__":
@@ -164,7 +159,7 @@ if __name__ == "__main__":
     if not cfg.is_absolute():
         cfg = _ROOT / cfg
     if not cfg.exists():
-        print(f"ERROR: config tidak ditemukan: {cfg}")
+        print(f"ERROR: config not found: {cfg}")
         sys.exit(1)
 
     try:

@@ -1,7 +1,6 @@
 """
 train_base_models.py — Base-model screening: 4 detectors x 3 seeds at 640 px
 ============================================================================
-(originally `exp-journal-1/02_multiseed_baseline.py`)
 
 Models : YOLOv8n, YOLO11n, YOLO12n, YOLO26n (COCO-pretrained, Ultralytics)
 Seeds  : 42, 123, 456
@@ -99,12 +98,12 @@ def check_environment():
         print(f"  VRAM          : {vram:.1f} GB")
         print(f"  CUDA version  : {torch.version.cuda}")
     else:
-        print("  WARNING: CUDA tidak tersedia!")
+        print("  WARNING: CUDA not available!")
     print(f"\n  DATASET_YAML  : {DATASET_YAML}")
     print(f"  YAML exists   : {DATASET_YAML.exists()}")
     print(f"  EXP_ROOT      : {EXP_ROOT}")
     if not DATASET_YAML.exists():
-        print("\n  YAML tidak ditemukan!")
+        print("\n  YAML not found!")
         return False
     return True
 

@@ -1,12 +1,9 @@
-# YOLO11n + RepC3k2 (Tahap 2, Track B1) — backbone C3k2 -> RepC3k2
-# =================================================================
-# Base: yolo11.yaml (Ultralytics standar)
-# Change: C3k2 di backbone (layer 2, 4, 6, 8) -> RepC3k2 (reparameterizable).
-#         Neck C3k2 dibiarkan dulu (konservatif). Free-accuracy via reparam:
-#         multi-branch saat train, fuse single conv saat inference.
-#
-# RepC3k2 harus di-register sebelum load (register_repc3k2.py).
-# Signature identik C3k2 -> drop-in.
+# T2 — YOLO11n with RepC3k2 in the backbone
+# =========================================
+# Only change from yolo11.yaml: the backbone C3k2 blocks (layers 2, 4, 6, 8)
+# become RepC3k2 (re-parameterizable; fused into a single conv for inference).
+# The neck C3k2 blocks are unchanged. Register RepC3k2 first with
+# scripts/train/register_repc3k2.py.
 
 nc: 5 # dead, healthy, mismanaged, smallish, yellowish
 scales:
@@ -17,7 +14,7 @@ scales:
   l: [1.00, 1.00, 512]
   x: [1.00, 1.50, 512]
 
-# YOLO11n backbone (C3k2 -> RepC3k2 di layer 2,4,6,8)
+# YOLO11n backbone (C3k2 -> RepC3k2 at layers 2, 4, 6, 8)
 backbone:
   # [from, repeats, module, args]
   - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2
@@ -32,7 +29,7 @@ backbone:
   - [-1, 1, SPPF, [1024, 5]] # 9
   - [-1, 2, C2PSA, [1024]] # 10
 
-# YOLO11n head (neck C3k2 dibiarkan default -- konservatif)
+# YOLO11n head (neck C3k2 unchanged)
 head:
   - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
   - [[-1, 6], 1, Concat, [1]] # cat backbone P4

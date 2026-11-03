@@ -1,7 +1,6 @@
 """
 export_onnx.py — Export the deployed model to ONNX at the three study resolutions
 =================================================================================
-(originally `exp-journal-1/final_using_yolo11/scripts/export_final_onnx.py`)
 
 Static input, batch 1, opset 12, onnxsim — the settings that TensorRT 8.2
 (JetPack 4.6) accepts. One ONNX file per inference resolution, because the
@@ -89,7 +88,7 @@ def export_one(weights, res, tag, opset, simplify):
     print(f"\n  [{tag}@{res}] source: {weights}")
     if onnx_target.exists():
         size = onnx_target.stat().st_size / 1e6
-        print(f"  [{tag}@{res}] sudah ada ({size:.2f} MB), skip. Hapus untuk re-export.")
+        print(f"  [{tag}@{res}] already exists ({size:.2f} MB), skipped. Delete it to re-export.")
         return {"tag": tag, "res": res, "status": "skipped",
                 "onnx": str(onnx_target), "size_mb": round(size, 2)}
 
@@ -98,7 +97,7 @@ def export_one(weights, res, tag, opset, simplify):
         model = YOLO(str(weights))
         exported = model.export(format="onnx", imgsz=res, opset=opset,
                                 simplify=simplify, dynamic=EXPORT_CONFIG["dynamic"])
-        # Ultralytics simpan onnx di samping .pt -> pindahkan
+        # Ultralytics writes the ONNX next to the .pt; move it
         cand = Path(weights).with_suffix(".onnx")
         if cand.exists():
             cand.rename(onnx_target)
@@ -132,7 +131,7 @@ def main():
         return
     w = Path(args.weights)
     if not w.exists():
-        print(f"\nERROR: weights tidak ditemukan: {w}")
+        print(f"\nERROR: weights not found: {w}")
         return
 
     ONNX_DIR.mkdir(parents=True, exist_ok=True)

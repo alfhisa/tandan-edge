@@ -1,7 +1,6 @@
 """
 train_repc3k2.py — T2: YOLO11n with C3k2 -> RepC3k2 in the backbone (640 px)
 ============================================================================
-(originally `exp-journal-1/final_using_yolo11/scripts/train_repc3k2.py`)
 
 Hypothesis tested: a re-parameterisable block (multi-branch in training,
 single conv after fuse) raises mAP at identical inference cost.
@@ -9,7 +8,7 @@ Default is one seed (screening filter), as in the reported results.
 
 Usage (from the repository root):
   python scripts/train/train_repc3k2.py --seeds 42 --epochs 1   # smoke test
-  python scripts/train/train_repc3k2.py                         # seed 42 (paper)
+  python scripts/train/train_repc3k2.py                         # seed 42 (reported run)
 
 Output: runs/T2_repc3k2_seed42/
 Python 3.8 compatible.
@@ -128,7 +127,7 @@ def run_single(seed, epochs, config):
 
     run_name = f"T2_repc3k2_seed{seed}"
     run_dir = RUNS_DIR / run_name
-    print(f"\n{'#'*72}\n  TAHAP 2 — Track B1: RepC3k2\n  Run: {run_name} | seed={seed} epochs={epochs}\n{'#'*72}\n")
+    print(f"\n{'#'*72}\n  T2: RepC3k2\n  Run: {run_name} | seed={seed} epochs={epochs}\n{'#'*72}\n")
 
     model = YOLO(str(config))
     if PRETRAINED.exists():
@@ -175,11 +174,11 @@ def main():
     ap.add_argument("--config", type=str, default=str(DEFAULT_CONFIG))
     args = ap.parse_args()
 
-    print_section("TAHAP 2 — TRACK B1: RepC3k2")
+    print_section("T2: RepC3k2")
     print(f"  Seeds: {args.seeds} | Epochs: {args.epochs}")
     print(f"  Config: {Path(args.config).name}")
     if len(args.seeds) == 1:
-        print("  >> 1-SEED QUICK FILTER (3-seed nanti untuk model final) <<")
+        print("  >> 1-SEED SCREENING RUN <<")
     if not DATASET_YAML.exists() or not PRETRAINED.exists():
         print("ERROR: dataset/pretrained missing"); return
     if not Path(args.config).exists():
@@ -195,7 +194,7 @@ def main():
             import traceback; traceback.print_exc()
 
     if runs:
-        print_section("SUMMARY — TAHAP 2 (RepC3k2)")
+        print_section("SUMMARY — T2 (RepC3k2)")
         print(f"  {'Seed':<8}{'mAP50-95':>10}{'min_recall':>12}{'GFLOPs':>8}{'GPU_FPS':>10}{'fuse':>6}")
         for r in runs:
             p = r["profile"]
@@ -206,7 +205,7 @@ def main():
             m = [r["macro_mAP50_95"] for r in runs]
             print(f"\n  mAP50-95 mean±std: {statistics.mean(m):.4f} ± {statistics.stdev(m):.4f}")
         print(f"\n  COMPARE vs baseline T0: 0.9619 ± 0.0023")
-        print(f"  H2: RepC3k2 menaikkan mAP di atas noise (>0.0023) dgn latency identik setelah fuse")
+        print(f"  H2: RepC3k2 raises mAP above seed noise (>0.0023) at identical latency after fusing")
 
 
 if __name__ == "__main__":

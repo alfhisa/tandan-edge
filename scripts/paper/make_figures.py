@@ -42,7 +42,7 @@ from matplotlib.patches import Patch, Rectangle
 OUT = P("figures")
 CLASSES = ["dead", "healthy", "mismanaged", "smallish", "yellowish"]
 LABELS = ["Dead", "Healthy", "Mismanaged", "Smallish", "Yellowish"]
-CCOL = ["#d62728", "#2ca02c", "#ff7f0e", "#1f77b4", "#e6c619"]   # sama dengan fig_dataset_samples
+CCOL = ["#d62728", "#2ca02c", "#ff7f0e", "#1f77b4", "#e6c619"]   # same as fig_dataset_samples
 INK, MUTED, GRID = "#222222", "#666666", "#e5e5e5"
 C_OURS, C_BASE, C_RES = "#c0392b", "#7f7f7f", "#2c6e9b"
 # deployed weights: release asset if present, otherwise your own R4 run
@@ -289,7 +289,7 @@ def fig_confusion():
     N = M.copy().astype(float)
     colsum = N[:, :nc].sum(0)
     Nn = np.zeros_like(N)
-    Nn[:, :nc] = N[:, :nc] / np.maximum(colsum, 1)          # dinormalisasi per kelas GT
+    Nn[:, :nc] = N[:, :nc] / np.maximum(colsum, 1)          # normalised per GT class
     fig, ax = plt.subplots(figsize=(3.5, 3.1))
     show = Nn[:, :nc]
     im = ax.imshow(show, cmap="Blues", vmin=0, vmax=1, aspect="auto")
@@ -333,7 +333,7 @@ def fig_qualitative(n_rows=3, crop=480, seed=7):
             out.append((c, (cx - w / 2) * W, (cy - h / 2) * H, (cx + w / 2) * W, (cy + h / 2) * H))
         return out
 
-    # cari crop yang memuat kelas minoritas (mismanaged, dead, yellowish)
+    # find crops that contain minority classes (mismanaged, dead, yellowish)
     targets = []
     for want in (2, 0, 4):
         rnd.shuffle(imgs)
@@ -431,5 +431,5 @@ if __name__ == "__main__":
         print(k)
         try:
             FIGS[k]()
-        except Exception as e:  # satu figure gagal tidak menghentikan yang lain
-            print("  GAGAL %s: %s: %s" % (k, type(e).__name__, e))
+        except Exception as e:  # one failing figure does not stop the others
+            print("  FAILED %s: %s: %s" % (k, type(e).__name__, e))

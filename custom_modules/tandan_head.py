@@ -1,29 +1,12 @@
 """
-tandan_head.py — TandanDetect: Shared-Conv Separate-BN Detection Head (R1)
-===========================================================================
-Komponen K2 dari TANDAN-YOLO. Mengganti Detect head YOLO11 dengan head
-shared-convolution:
+tandan_head.py — TandanDetect: shared-convolution detection head (SCS-Head, R1).
 
-  Baseline Detect (per level P3/P4/P5):
-    box branch : Conv3x3 -> Conv3x3 -> Conv2d(4*reg_max)   } masing-masing
-    cls branch : DWConv stack       -> Conv2d(nc)          } level punya
-                                                             bobot sendiri
-  TandanDetect (SCS-Head):
-    stem SHARED : unify 1x1 (per level) -> [convA 3x3 SHARED + BN per level]
-                  -> [convB 3x3 SHARED + BN per level]
-    box  : Conv2d(4*reg_max) SHARED -> Scale (learnable per level)
-    cls  : Conv2d(nc) SHARED
+Replaces the YOLO11 Detect head with one whose 3x3 convolutions and final
+projections are shared across P3/P4/P5, with a separate BatchNorm and a
+learnable scale per level. Uses only standard ops (ONNX opset 12 and
+TensorRT 8.2 compatible).
 
-  Prinsip "shared convolution, separate BN":
-  - Bobot conv dibagi antar 3 level -> params turun signifikan
-  - BN terpisah per level -> statistik feature tiap skala tetap terkalibrasi
-  - Scale layer per level mengkompensasi perbedaan magnitudo antar skala
-  - Stem dihitung SEKALI per level dan dipakai bersama box+cls
-    (baseline menghitung dua branch terpisah) -> GFLOPs head turun
-
-Semua op standar (conv/BN/SiLU/mul) -> ONNX opset 12 & TensorRT 8.2 safe.
-Referensi: LSCD/SCSHead family (ELS-YOLO Sensors 2025; YOLOv8-PD; LEAD-YOLO).
-
+Related designs: LSCD/SCSHead family (e.g. ELS-YOLO, Sensors 2025).
 Python 3.8 compatible.
 """
 
@@ -53,30 +36,29 @@ class Scale(nn.Module):
 
 class TandanDetect(Detect):
     """
-    SCS-Head: shared conv + separate BN detection head, drop-in Detect.
+    SCS-Head: shared-conv, separate-BN detection head (drop-in for Detect).
 
-    Subclass Detect agar:
-    - isinstance(m, Detect) tetap True (stride init & task detection jalan)
-    - atribut warisan (nc, reg_max, no, stride, dfl, anchors) tetap dipakai
-    Forward & bias_init di-override; cv2/cv3 warisan dikosongkan.
+    Subclasses Detect so that stride initialisation and inherited attributes
+    (nc, reg_max, no, stride, dfl, anchors) keep working. forward and
+    bias_init are overridden; the inherited cv2/cv3 branches are removed.
     """
 
     def __init__(self, nc: int = 80, reg_max: int = 16, end2end: bool = False, ch=()):
-        # Signature WAJIB mencerminkan Detect.__init__ Ultralytics 8.4.48:
+        # The signature must match Detect.__init__ in Ultralytics 8.4.48:
         #   __init__(self, nc=80, reg_max=16, end2end=False, ch=())
-        # parse_model memanggil m(*args) secara positional -> kalau signature
-        # tidak sama persis, argumen bergeser / jumlahnya tidak cocok.
+        # parse_model calls m(*args) positionally, so any mismatch shifts
+        # the arguments.
         super().__init__(nc=nc, reg_max=reg_max, end2end=end2end, ch=ch)
-        hidc = ch[0]  # 64 utk YOLO11n (P3) — dim bersama stem
+        hidc = ch[0]  # 64 for YOLO11n (P3); hidden width of the shared stem
 
-        # Buang branch per-level bawaan (params dihemat)
+        # Remove the default per-level branches
         self.cv2 = nn.ModuleList(nn.Identity() for _ in ch)
         self.cv3 = nn.ModuleList(nn.Identity() for _ in ch)
 
-        # Per-level: unify channel ke hidc (Conv = conv+BN+SiLU Ultralytics)
+        # Per level: project channels to hidc (Ultralytics Conv = conv + BN + SiLU)
         self.unify = nn.ModuleList(Conv(c, hidc, 1, 1) for c in ch)
 
-        # SHARED conv weights (tanpa bias; BN per level yang bawa bias)
+        # Shared conv weights (no bias; the per-level BN carries it)
         self.convA = nn.Conv2d(hidc, hidc, 3, 1, 1, bias=False)
         self.convB = nn.Conv2d(hidc, hidc, 3, 1, 1, bias=False)
         # Separate BN per level
@@ -84,18 +66,17 @@ class TandanDetect(Detect):
         self.bnB = nn.ModuleList(nn.BatchNorm2d(hidc) for _ in ch)
         self.act = nn.SiLU()
 
-        # SHARED final projections
+        # Shared final projections
         self.final_box = nn.Conv2d(hidc, 4 * self.reg_max, 1)
         self.final_cls = nn.Conv2d(hidc, self.nc, 1)
-        # Per-level scale utk box (kompensasi magnitudo antar skala)
+        # Per-level scale for the box branch
         self.scales = nn.ModuleList(Scale(1.0) for _ in ch)
 
     def forward(self, x):
         """
-        Ultralytics 8.4.48 Detect API: forward mengembalikan dict
+        Returns the Ultralytics 8.4.48 Detect output dict:
             {"boxes": (bs, 4*reg_max, N), "scores": (bs, nc, N), "feats": list}
-        dengan N = total anchor seluruh level (P3+P4+P5 di-flatten & concat).
-        Format ini yang dikonsumsi v8DetectionLoss dan _inference.
+        where N is the number of anchors over all levels.
         """
         bs = x[0].shape[0]
         boxes_l, scores_l = [], []
@@ -111,7 +92,7 @@ class TandanDetect(Detect):
         preds = dict(
             boxes=torch.cat(boxes_l, dim=-1),
             scores=torch.cat(scores_l, dim=-1),
-            feats=x,  # dipakai _get_decode_boxes untuk shape & make_anchors
+            feats=x,  # used by _get_decode_boxes for shapes and make_anchors
         )
         if self.training:
             return preds
@@ -119,17 +100,17 @@ class TandanDetect(Detect):
         return y if self.export else (y, preds)
 
     def bias_init(self):
-        """Init bias final conv (shared -> pakai stride tengah 16 sbg acuan)."""
+        """Initialise the final conv biases (shared, so stride 16 is used as reference)."""
         self.final_box.bias.data[:] = 1.0
         self.final_cls.bias.data[: self.nc] = math.log(
             5 / self.nc / (640 / 16) ** 2
         )
 
 
-# Self-test ringan (butuh ultralytics; jalankan di server)
+# Quick self-test (needs Ultralytics; run on the training server)
 if __name__ == "__main__":
     if Conv is None:
-        print("ultralytics tidak tersedia -- jalankan di server.")
+        print("Ultralytics is not available -- run this on the training server.")
     else:
         print("Testing TandanDetect (SCS-Head)...")
         ch = (64, 128, 256)  # P3,P4,P5 YOLO11n

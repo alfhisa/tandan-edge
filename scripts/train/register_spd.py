@@ -1,7 +1,6 @@
 """
 register_spd.py — Register SPD-Conv (A1) into Ultralytics
 ==========================================================
-(originally `modifications/scripts/register_modules.py`)
 
 Injects custom modules (SPDConv, ...) into the Ultralytics namespace and
 patches parse_model so the YAML parser performs correct (c1, c2) channel

@@ -7,11 +7,10 @@ conservative variant). Supports 1-seed quick-check or full 3-seed protocol.
 Auto-documents: mAP50, mAP50-95, per-class, params, GFLOPs, GPU FPS, and
 whether model.fuse() succeeds (critical for TensorRT deployment).
 
-(originally `exp-journal-1/eff/scripts/train_rep.py`)
 
 Usage (from the repository root):
   python scripts/train/train_rep.py --seeds 42 --epochs 1   # smoke test
-  python scripts/train/train_rep.py                         # 3 seeds (paper)
+  python scripts/train/train_rep.py                         # 3 seeds (reported runs)
 
 Output: runs/E1_seed{42,123,456}/
 

@@ -112,12 +112,12 @@ batch 16, optimizer `auto` (SGD, lr0 0.01), AMP, COCO-pretrained weights,
 seeds 42, 123 and 456 where three seeds are reported. Each run writes to
 `runs/<run_name>/`. Time estimates are for one Quadro RTX 6000.
 
-**1. Base-model screening** (Table 4) — 12 runs, ~8–10 h
+**1. Base-model screening** — 12 runs, ~8–10 h
 ```bash
 python scripts/train/train_base_models.py
 ```
 
-**2. Modification screening** (Table 5)
+**2. Modification screening**
 ```bash
 python scripts/train/train_spd.py --exp A1                 # SPD-Conv, YOLO12n, 3 seeds
 python scripts/train/train_vfl.py                          # Varifocal Loss, YOLO12n, 3 seeds
@@ -130,7 +130,7 @@ python scripts/train/train_tandan.py --config model_configs/tandan-r3-bifpn.yaml
 python scripts/train/train_tandan.py --config model_configs/yolo11n-base.yaml --name R6_adamw768 --imgsz 768 --optimizer AdamW --lr0 0.001
 ```
 
-**3. Resolution study** (Table 6, Fig. 4) — the 640-px models come from step 1
+**3. Resolution study** — the 640-px models come from step 1
 ```bash
 python scripts/train/train_tandan.py --config model_configs/yolo11n-base.yaml --name R5_res704 --imgsz 704 --seeds 42 123 456
 python scripts/train/train_tandan.py --config model_configs/yolo11n-base.yaml --name R4_res768 --imgsz 768 --seeds 42 123 456
@@ -146,7 +146,7 @@ Both overwrite the CSVs in `results/reeval/`, so `git diff results/` shows any
 difference from the published values. The accuracy values that Ultralytics
 logs during training (`results.csv`) are not used for any reported number.
 
-**5. Export and on-device benchmarks** (Tables 4, 7, 8; Figs. 5, 6) — see [`jetson/README.md`](jetson/README.md)
+**5. Export and on-device benchmarks** — see [`jetson/README.md`](jetson/README.md)
 ```bash
 python scripts/export/export_onnx.py         # deploy/onnx/best_{640,704,768}.onnx (opset 12, static batch 1)
 # then on the Jetson: jetson/benchmark_trt.sh, jetson/thermal_test.sh, jetson/bench_pytorch.py
@@ -156,31 +156,31 @@ python scripts/export/export_onnx.py         # deploy/onnx/best_{640,704,768}.on
 ```bash
 python scripts/paper/make_tables.py          # results/tables/T1–T8 (+ ALL_TABLES.md)
 python scripts/paper/make_figures.py         # results/figures/
-python scripts/paper/fig_dataset_samples.py  # Fig. 2b
+python scripts/paper/fig_dataset_samples.py  # annotated dataset samples
 ```
 Tables T1 and T3–T8 and figures F3–F6, S1, S2 need only `results/`; T2, F2a,
 F2b need the dataset; F7 and F8 also need the deployed weights.
 
 ## Where each number comes from
 
-| Paper item | File |
+| Item | File |
 |---|---|
-| Table 2 (dataset) | computed from the labels by `make_tables.py` → `results/tables/T2_dataset.csv` |
-| Table 3 (settings) | `results/runs/R4_res768_seed42/args.yaml` |
-| Tables 4, 5 (accuracy) | `results/reeval/reeval_runs.csv`, `reeval_summary.csv` |
-| Tables 4, 5 (params, GFLOPs) | `results/runs/<run>/<run>_metrics.json` → `profile` |
-| Table 4 (Jetson FPS) | `results/jetson/base_models_640/*_trt.log` |
-| Table 6, Fig. 4 | `results/reeval/train_infer_runs.csv`, `train_infer_summary.csv` |
-| Table 7, Fig. 5 | `results/jetson/trt_resolution/benchmark_summary.csv` (+ `logs/`), `results/jetson/pytorch_benchmark.csv` |
-| Table 8, Fig. 6 | `results/jetson/thermal_30min/`, `results/jetson/thermal_5min/` |
-| Fig. 7 | `results/reeval/cm_final_R4seed42_infer704.npy` (matrix[pred, gt], last index = background) |
+| Dataset statistics | computed from the labels by `make_tables.py` → `results/tables/T2_dataset.csv` |
+| Training settings | `results/runs/R4_res768_seed42/args.yaml` |
+| Accuracy of every run | `results/reeval/reeval_runs.csv`, `reeval_summary.csv` |
+| Parameters, GFLOPs | `results/runs/<run>/<run>_metrics.json` → `profile` |
+| Jetson FPS of the base detectors | `results/jetson/base_models_640/*_trt.log` |
+| Training x inference resolution matrix | `results/reeval/train_infer_runs.csv`, `train_infer_summary.csv` |
+| Jetson speed (TensorRT and PyTorch) | `results/jetson/trt_resolution/benchmark_summary.csv` (+ `logs/`), `results/jetson/pytorch_benchmark.csv` |
+| Thermal test | `results/jetson/thermal_30min/`, `results/jetson/thermal_5min/` |
+| Confusion matrix of the deployed model | `results/reeval/cm_final_R4seed42_infer704.npy` (matrix[pred, gt], last index = background) |
 | Confusion matrices of all runs | `results/reeval/cm/<run>.npy` |
-| Training curves (Fig. S1) | `results/runs/<run>/results.csv` |
+| Training curves | `results/runs/<run>/results.csv` |
 
 `results/runs/<run>/` keeps, for each of the 35 runs, the exact Ultralytics
 arguments (`args.yaml`), the per-epoch log (`results.csv`) and the run summary
-(`*_metrics.json`). `reeval_runs.csv` also lists rows that are not used in the
-paper: four single-seed runs from an earlier pass (`exp01`–`exp04`), a
+(`*_metrics.json`). `reeval_runs.csv` also lists rows that are not part of the
+reported results: four single-seed runs from an earlier pass (`exp01`–`exp04`), a
 duplicate YOLO11n group (`T0_baseline`, identical to `yolo11n_seed*`), and an
 invalid Network Slimming attempt (`T4a_sparsity`: its L1 penalty was attached
 to a callback event that Ultralytics never fires, so the run reproduces
@@ -192,7 +192,7 @@ repository.
 
 - **Negative results are part of the method.** None of the screened
   architecture, loss or optimiser changes gave a significant,
-  affordable gain over the plain detector (Table 5); the gain came from the
+  affordable gain over the plain detector; the gain came from the
   training/inference resolution choice.
 - `custom_modules/` are registered into Ultralytics at run time by the helpers
   in `scripts/train/` (no edits to the Ultralytics package). Checkpoints of the

@@ -1,12 +1,6 @@
-# YOLO11n baseline standar (nc=5) — untuk studi resolusi
-# ========================================================
-# TIDAK ada modifikasi arsitektur. Dipakai untuk R4: mencari operating point
-# resolusi terbaik (640 / 704 / 768) setelah jalur modifikasi arsitektur
-# (R1 SCS-Head, R2 SimAM, R3 BiFPN) semuanya gagal.
-#
-# Acuan @640: mAP50-95 0.9619 ± 0.0023 | 20.2 FPS Jetson | 6.32 GFLOPs
-# Proyeksi GFLOPs: 704 -> ~7.6 | 768 -> ~9.1 | 896 -> ~12.4
-# Proyeksi FPS Jetson (kuadratik): 704 -> ~16.7 | 768 -> ~14.0 | 896 -> ~10.3
+# YOLO11n (nc=5) without architectural changes
+# ============================================
+# Used for the training-resolution runs (R4 at 768 px, R5 at 704 px, R6).
 
 nc: 5 # dead, healthy, mismanaged, smallish, yellowish
 scales:

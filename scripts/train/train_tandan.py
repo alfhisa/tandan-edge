@@ -1,7 +1,6 @@
 """
 train_tandan.py — YOLO11n runs R1–R6 (architecture screening + resolution study)
 ================================================================================
-(originally `tandan-yolo/scripts/train_tandan.py`)
 
 One script for every YOLO11n run built from a model YAML; COCO-pretrained
 yolo11n.pt weights are transferred where layer shapes match.
@@ -146,8 +145,8 @@ def run_single(seed, epochs, config, name, imgsz=640, optimizer='auto', lr0=None
     model = YOLO(str(config))
     if PRETRAINED.exists():
         model.load(str(PRETRAINED))
-        print(f"  [pretrained] transfer dari {PRETRAINED.name} (partial match; "
-              f"head baru train dari awal)")
+        print(f"  [pretrained] transfer from {PRETRAINED.name} (partial match; "
+              f"new head layers trained from scratch)")
 
     args = {**BASE_TRAIN_ARGS, "epochs": epochs, "seed": seed, "imgsz": imgsz}
     if optimizer and optimizer != "auto":
@@ -193,16 +192,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", type=str, required=True)
     ap.add_argument("--name", type=str, required=True,
-                    help="nama eksperimen, mis. R1_scshead")
+                    help="experiment name, e.g. R1_scshead")
     ap.add_argument("--seeds", nargs="+", type=int, default=[42])
     ap.add_argument("--epochs", type=int, default=BASE_TRAIN_ARGS["epochs"])
     ap.add_argument("--imgsz", type=int, default=640,
-                    help="resolusi input (640 default; 704/768/896 untuk studi resolusi)")
+                    help="input resolution (default 640; 704/768 for the resolution study)")
     ap.add_argument("--optimizer", type=str, default="auto",
                     choices=["auto", "SGD", "Adam", "AdamW", "NAdam", "RAdam", "RMSProp"],
-                    help="'auto' = default Ultralytics; 'AdamW' utk replikasi setelan Thapa 2025")
+                    help="'auto' = default Ultralytics; 'AdamW' to replicate the setting of Thapa et al. (2025)")
     ap.add_argument("--lr0", type=float, default=None,
-                    help="initial learning rate (mis. 0.001 utk AdamW). None = default Ultralytics")
+                    help="initial learning rate (e.g. 0.001 for AdamW). None = default Ultralytics")
     args = ap.parse_args()
 
     print_section(f"TANDAN-YOLO — {args.name}")
@@ -213,7 +212,7 @@ def main():
     if not cfg.is_absolute():
         cfg = _ROOT / cfg
     if not cfg.exists():
-        print(f"ERROR: config tidak ditemukan: {cfg}"); return
+        print(f"ERROR: config not found: {cfg}"); return
     if not DATASET_YAML.exists() or not PRETRAINED.exists():
         print("ERROR: dataset/pretrained missing"); return
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
@@ -244,7 +243,7 @@ def main():
         b = BASELINE_REF
         print(f"\n  BASELINE T0: mAP {b['mAP50_95']} ± {b['std']} | "
               f"{b['params_M']}M | {b['gflops']} GFLOPs | GPU {b['gpu_fps']} FPS")
-        print("  Gate R1: mAP drop <= 0.005 DAN GFLOPs turun -> LANJUT")
+        print("  Gate R1: mAP drop <= 0.005 AND lower GFLOPs -> continue")
 
 
 if __name__ == "__main__":

@@ -1,8 +1,7 @@
-# TANDAN-YOLO R1 — YOLO11n + SCS-Head (TandanDetect)
-# ====================================================
-# Base: yolo11n standar. SATU perubahan: Detect -> TandanDetect (shared conv,
-# separate BN, scale layer). Backbone & neck TIDAK disentuh (isolasi efek R1).
-# Register TandanDetect dulu (register_tandan.py) sebelum load.
+# R1 — YOLO11n with the SCS-Head (TandanDetect)
+# ==============================================
+# Only change from yolo11n: Detect -> TandanDetect (shared conv, separate BN,
+# per-level scale). Register it first with scripts/train/register_tandan.py.
 
 nc: 5 # dead, healthy, mismanaged, smallish, yellowish
 scales:

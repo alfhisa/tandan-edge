@@ -1,5 +1,5 @@
-# Efficiency Modification E1 (Conservative): YOLOv12n + A2C2fRep in backbone
-# ===========================================================================
+# E1 — YOLOv12n with A2C2fRep in the backbone
+# ===========================================
 # Base: official yolo12.yaml
 # Change: A2C2f (area-attention) at backbone layers 6 and 8 replaced with
 #         A2C2fRep (RepConv-based, attention removed). Neck A2C2f kept for now.
@@ -11,7 +11,7 @@
 # capacity. Conservative: neck attention retained to protect accuracy;
 # escalate to neck replacement (E2) only if FPS < 15.
 #
-# A2C2fRep must be registered before loading (see register_rep.py).
+# A2C2fRep must be registered before loading (see scripts/train/register_rep.py).
 
 nc: 5 # dead, healthy, mismanaged, smallish, yellowish
 scales:

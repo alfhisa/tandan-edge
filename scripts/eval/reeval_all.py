@@ -79,7 +79,7 @@ def group_name(run):
 
 
 # ----------------------------------------------------------------------
-# Mode --one: evaluasi satu run (dijalankan di subprocess)
+# --one mode: evaluate a single run (called in a subprocess)
 # ----------------------------------------------------------------------
 def eval_one(run):
     root = os.path.abspath(code_root(run))
@@ -120,20 +120,20 @@ def eval_one(run):
         "recall": round(float(m.box.mr), 4),
         "infer_ms": round(float(m.speed.get("inference", 0.0)), 2),
     }
-    # mAP50-95 per kelas
+    # mAP50-95 per class
     maps = list(m.box.maps)
     for i, c in enumerate(CLASSES):
         res[f"ap5095_{c}"] = round(float(maps[i]), 4) if i < len(maps) else ""
 
-    # Confusion matrix -> FP background (prediksi tanpa GT) & FN (GT terlewat)
+    # Confusion matrix -> background FP (predictions without GT) and FN (missed GT)
     cm = getattr(getattr(m, "confusion_matrix", None), "matrix", None)
     if cm is not None:
         cm = np.asarray(cm)
         nc = len(CLASSES)
         os.makedirs(os.path.join(OUT, "cm"), exist_ok=True)
         np.save(os.path.join(OUT, "cm", res["run"] + ".npy"), cm)
-        bg_fp = cm[:nc, nc]          # prediksi kelas i, GT = background
-        fn = cm[nc, :nc]             # GT kelas j, tidak terdeteksi
+        bg_fp = cm[:nc, nc]          # predicted class i, GT = background
+        fn = cm[nc, :nc]             # GT class j, not detected
         res["bg_fp_total"] = int(bg_fp.sum())
         for i, c in enumerate(CLASSES):
             res[f"bg_fp_{c}"] = int(bg_fp[i])
@@ -144,7 +144,7 @@ def eval_one(run):
 
 
 # ----------------------------------------------------------------------
-# Mode utama: loop semua run lewat subprocess, lalu rekap
+# Main mode: run every evaluation in a subprocess, then summarise
 # ----------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
@@ -158,7 +158,7 @@ def main():
 
     os.makedirs(os.path.join(OUT, "log"), exist_ok=True)
     runs = find_runs(a.only)
-    print(f"{len(runs)} run akan dievaluasi\n")
+    print(f"{len(runs)} runs to evaluate\n")
     rows = []
     for k, run in enumerate(runs, 1):
         name = os.path.basename(run)
@@ -178,7 +178,7 @@ def main():
     if not rows:
         return
 
-    # --only: gabungkan dengan hasil lama (run yang sama diganti), jangan timpa
+    # --only: merge with the existing results (same run replaced), do not overwrite
     old_csv = os.path.join(OUT, "reeval_runs.csv")
     if a.only and os.path.isfile(old_csv):
         new_names = {r["run"] for r in rows}
@@ -193,7 +193,7 @@ def main():
                 except (ValueError, AttributeError):
                     pass
         rows = old + rows
-        print(f"\n(digabung dengan {len(old)} run lama dari reeval_runs.csv)")
+        print(f"\n(merged with {len(old)} existing runs from reeval_runs.csv)")
 
     keys = list(dict.fromkeys(k for r in rows for k in r))
     with open(os.path.join(OUT, "reeval_runs.csv"), "w", newline="") as f:
@@ -201,7 +201,7 @@ def main():
         w.writeheader()
         w.writerows(rows)
 
-    # Rekap per eksperimen (mean ± std antar seed)
+    # Summary per experiment (mean ± SD over seeds)
     groups = {}
     for r in rows:
         groups.setdefault(r["group"], []).append(r)
@@ -228,7 +228,7 @@ def main():
         w.writeheader()
         w.writerows(summ)
 
-    print("\n=== RINGKASAN (mean ± std) ===")
+    print("\n=== SUMMARY (mean ± SD) ===")
     print(f"{'group':24s} n  imgsz  mAP50-95          bgFP_total   mismanaged")
     for s in summ:
         sd = s["mAP50_95_std"]

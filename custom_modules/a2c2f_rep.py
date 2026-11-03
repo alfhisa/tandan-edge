@@ -1,30 +1,13 @@
 """
-a2c2f_rep.py — A2C2fRep: A2C2f with attention replaced by re-parameterizable conv
-==================================================================================
-Reference / motivation (BAE efficiency / Journal 1):
-  YOLOv12n's A2C2f block uses area-attention (ABlock -> AAttn) which is
-  memory-access-bound and SLOW on the Jetson Nano's Maxwell GPU, because
-  FlashAttention (which mitigates attention's memory bottleneck) does NOT
-  support Maxwell (only Turing/Ampere/Ada/Hopper). See YOLOv12 paper
-  (Tian et al., NeurIPS 2025, arXiv:2502.12524) sec. 3.1 and 6.
+a2c2f_rep.py — A2C2fRep: YOLOv12 A2C2f with the area-attention block replaced
+by a re-parameterizable conv block (E1).
 
-  A2C2fRep keeps the C2f wrapper (cv1, cv2, split-concat structure) of A2C2f
-  but replaces the heavy ABlock (attention) with a RepConv block
-  (RepVGG/DBB-style): multi-branch at training time (3x3 + 1x1 + optional
-  identity BN) for representational richness, fused into a SINGLE 3x3 conv at
-  inference time (zero extra inference cost, fast on Maxwell).
+Area attention is memory-bound on the Jetson Nano's Maxwell GPU, where
+FlashAttention is not supported. A2C2fRep keeps the A2C2f wrapper and swaps
+the attention block for RepConv, which fuses into a single 3x3 conv for
+inference. Same signature as A2C2f (drop-in in model YAMLs).
 
-  This is a drop-in replacement for A2C2f in the YAML: same (c1, c2, n, ...)
-  signature, same input/output channels, same spatial size.
-
-Design (mirrors A2C2f exactly except the inner block):
-  A2C2f:     cv1 -> [ABlock x2] per n -> concat -> cv2   (+ optional gamma residual)
-  A2C2fRep:  cv1 -> [RepConv]   per n -> concat -> cv2   (+ optional gamma residual)
-
-RepConv (from ultralytics.nn.modules.conv) already provides fuse_convs()
-and get_equivalent_kernel_bias(), so fusing before TensorRT export is handled
-by Ultralytics' standard model.fuse().
-
+References: Tian et al., YOLOv12, NeurIPS 2025; Ding et al., RepVGG, CVPR 2021.
 Python 3.8 compatible.
 """
 

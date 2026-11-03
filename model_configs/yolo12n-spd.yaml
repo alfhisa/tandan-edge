@@ -1,5 +1,5 @@
-# TANDAN Journal 1 — Modification A1: YOLOv12n + SPD-Conv
-# =========================================================
+# A1 — YOLOv12n with SPD-Conv
+# ===========================
 # Base: official yolo12.yaml (Ultralytics)
 # Change: strided Conv at P3/8, P4/16, P5/32 (backbone layers 3, 5, 7)
 #         replaced with SPDConv (space-to-depth + non-strided conv).
@@ -11,7 +11,7 @@
 #
 # Unchanged from base: P1/P2 downsampling, all C3k2/A2C2f blocks, head topology.
 #
-# Custom module SPDConv must be registered before loading (see register_modules.py).
+# Custom module SPDConv must be registered before loading (see scripts/train/register_spd.py).
 
 # Parameters
 nc: 5 # TANDAN: dead, healthy, mismanaged, smallish, yellowish

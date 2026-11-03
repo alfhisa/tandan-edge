@@ -1,7 +1,6 @@
 #!/bin/bash
 # ==============================================================================
 # benchmark_trt.sh — build TensorRT engines and measure speed on the Jetson Nano
-# (originally benchmark_jetson.sh; Table 7 / Fig. 5)
 # ==============================================================================
 # 3 input resolutions (640/704/768) x 3 precisions (FP32/FP16/INT8) = 9 configs.
 #

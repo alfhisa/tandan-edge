@@ -1,12 +1,8 @@
-# TANDAN-YOLO R3 — YOLO11n + BiFPN weighted fusion (neck)
-# ========================================================
-# Base: yolo11n standar. SATU perubahan: 4 titik Concat di neck ->
-# BiFPNConcat (bobot learnable per cabang, fast normalized fusion).
-# Backbone & head TIDAK disentuh (isolasi efek R3).
-#
-# Params naik 8 skalar saja (2 per titik fusi). GFLOPs praktis identik.
-# Bobot init 1.0 -> awal training setara Concat ternormalisasi, sehingga
-# gangguan terhadap bobot pretrained minimal (pelajaran dari R2).
+# R3 — YOLO11n with BiFPN weighted fusion in the neck
+# ==================================================
+# Only change from yolo11n: the four neck Concat layers become BiFPNConcat
+# (one learnable weight per branch, initialised to 1.0; 8 extra parameters).
+# Register it first with scripts/train/register_tandan.py.
 
 nc: 5 # dead, healthy, mismanaged, smallish, yellowish
 scales:

@@ -2,8 +2,8 @@
 """
 train_infer_matrix.py — Training resolution x inference resolution (FP32 and FP16)
 
-Produces the data behind Fig. 4 and Table 6 (the key finding: train at 768 px,
-run at 704 px). Same protocol as reeval_all.py (Ultralytics 8.4.48, val Site 2,
+Produces the training x inference resolution matrix (main finding: train at
+768 px, run at 704 px). Same protocol as reeval_all.py (Ultralytics 8.4.48, val Site 2,
 batch 16, conf 0.001, NMS IoU 0.7). FP16 = PyTorch half precision on the GPU.
 
 Models per training resolution (3 seeds each):
@@ -111,7 +111,7 @@ def main():
             print("%5d  %5d   %.4f ± %.4f    %.4f ± %.4f" % (
                 tr, inf, f32["mAP50_95_mean"], f32["mAP50_95_std"], f16["mAP50_95_mean"], f16["mAP50_95_std"]))
 
-    # Plot val untuk konfigurasi final
+    # Validation plots for the final configuration
     print("\nValidation plots for the deployed configuration (R4 seed42 @704)...", flush=True)
     evaluate(os.path.join(TRAIN[768].format(s=42), "weights", "best.pt"), 704, False,
              plots=True, name="R4_res768_seed42_infer704")

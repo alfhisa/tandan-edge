@@ -1,11 +1,8 @@
-# TANDAN-YOLO R2 — YOLO11n + C3k2SimAM (backbone)
-# =================================================
-# Base: yolo11n standar. SATU perubahan: C3k2 backbone (layer 2,4,6,8) ->
-# C3k2SimAM (SimAM parameter-free di ujung tiap bottleneck).
-# Head Detect & neck TIDAK disentuh (isolasi efek R2; SCS-Head sudah gugur di R1).
-#
-# Params HARUS identik baseline (SimAM 0 parameter). GFLOPs naik sangat tipis
-# (elementwise). Yang diuji: apakah akurasi naik di atas noise (>0.0023).
+# R2 — YOLO11n with C3k2SimAM in the backbone
+# ===========================================
+# Only change from yolo11n: the backbone C3k2 blocks (layers 2, 4, 6, 8)
+# become C3k2SimAM (parameter-free SimAM after each bottleneck).
+# Register it first with scripts/train/register_tandan.py.
 
 nc: 5 # dead, healthy, mismanaged, smallish, yellowish
 scales:
@@ -45,4 +42,4 @@ head:
   - [[-1, 10], 1, Concat, [1]]
   - [-1, 2, C3k2, [1024, True]] # 22 (P5/32)
 
-  - [[16, 19, 22], 1, Detect, [nc]] # head standar (SCS-Head gugur di R1)
+  - [[16, 19, 22], 1, Detect, [nc]] # standard head

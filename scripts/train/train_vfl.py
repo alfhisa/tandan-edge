@@ -7,7 +7,6 @@ the KEY metric: background false-positive rate (from confusion matrix).
 
 B0 (baseline, BCE) = the yolo12n_seed* runs of train_base_models.py.
 This script runs B1 (VFL) so B0 vs B1 can be compared apple-to-apple.
-(originally `exp-journal-1/bae/scripts/train_vfl.py`)
 
 Usage (from the repository root):
   python scripts/train/train_vfl.py --seeds 42 --epochs 1   # smoke test

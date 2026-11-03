@@ -1,5 +1,5 @@
 """
-custom_modules — layers and losses tested during model screening (Paper 1).
+custom_modules — layers and losses tested during model screening.
 
 None of these is used by the deployed model (plain YOLO11n trained at 768 px).
 They are kept so that every screening run in results/ can be reproduced and

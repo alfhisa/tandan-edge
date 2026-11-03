@@ -1,9 +1,9 @@
 """
-register_repc3k2.py — Register RepC3k2 into Ultralytics
-========================================================
-Inject RepC3k2 + patch parse_model agar YAML parser memberi channel injection
-(c1,c2) dan repeat handling (n) yang benar -- sama seperti C3k2. Package
-ultralytics TIDAK disentuh.
+register_repc3k2.py — register RepC3k2 with Ultralytics (T2).
+
+Adds RepC3k2 to the parser module sets used for C3k2, so the YAML parser
+handles its channels (c1, c2) and repeats (n) the same way, without modifying
+the installed Ultralytics package.
 
 Usage:
     from register_repc3k2 import register_all
@@ -54,7 +54,7 @@ def _patch(_tasks, verbose=True):
 
     def smart_fs(iterable=()):
         s = orig_fs(iterable)
-        # base_modules dan repeat_modules mengandung C3k2; tambahkan RepC3k2 ke keduanya
+        # base_modules and repeat_modules contain C3k2; add RepC3k2 to both
         if C3k2 in s and RepC3k2 not in s:
             return orig_fs(set(s) | {RepC3k2})
         return s

@@ -1,34 +1,15 @@
 """
-cb_focal_loss.py — Class-Balanced Weighted Focal Loss (Tahap 1, Track A)
-=========================================================================
-Rebuild + perbaikan dari loss modification paper IEEE (Saputra et al.,
-ICITEE 2025) untuk versi jurnal.
+cb_focal_loss.py — class-balanced focal loss for the classification branch (T1).
 
-Perbaikan berbasis teori dari paper IEEE:
-  1. Class weighting: Effective Number of Samples (Cui et al. 2019, CVPR)
-     yang BENAR, menggantikan inverse-frequency ekstrem (rasio 389:1 -> 4.8:1).
-     Paper IEEE menyebut Cui 2019 tapi formulanya inverse-freq biasa; ini
-     memperbaiki konsistensi + stabilitas training.
-  2. Weighted Focal Loss (gamma=2.0) dipertahankan (sudah benar), hanya
-     source weight-nya diperbaiki ke Cui effective number.
-  3. Box loss: TETAP CIoU default YOLO11 (paper IEEE pakai SmoothL1 yang
-     merupakan langkah mundur; CIoU scale-invariant & lebih baik).
-  4. DFL: TETAP DFL asli YOLO11 (paper IEEE pakai MSE approx; DFL penuh
-     lebih baik & tidak berat).
+Replaces the default BCE in Ultralytics v8DetectionLoss with a focal loss whose
+per-class weights follow the effective number of samples (Cui et al., 2019):
 
-Jadi modifikasi INTI di jurnal = class-balanced weighted focal loss pada
-komponen klasifikasi, menggantikan BCE default. Box & DFL dikembalikan ke
-default YOLO11 yang optimal.
+    w_i = (1 - beta) / (1 - beta^n_i), normalised so that sum(w) = num_classes
 
-Effective Number (Cui 2019):
-    E_n = (1 - beta^n) / (1 - beta)
-    w_i = (1 - beta) / (1 - beta^n_i)      # = 1 / E_n
-    dinormalisasi agar sum(w) = num_classes (menjaga skala loss ~1)
+Box (CIoU) and DFL losses are left at the YOLO11 defaults. Drop-in for
+self.bce: (pred_logits, target_scores) -> per-element loss, reduction="none".
 
-Drop-in replacement untuk self.bce (nn.BCEWithLogitsLoss(reduction="none"))
-di v8DetectionLoss: signature (pred_logits, target_scores) -> per-element
-loss, shape (bs, anchors, nc), reduction="none".
-
+References: Lin et al., focal loss, ICCV 2017; Cui et al., CVPR 2019.
 Python 3.8 compatible.
 """
 
@@ -79,7 +60,7 @@ class ClassBalancedFocalLoss(nn.Module):
 
     Args:
         class_weights: 1D tensor [nc], per-class effective-number weights
-        gamma: focal focusing parameter (default 2.0, from IEEE paper)
+        gamma: focal focusing parameter (default 2.0)
     """
 
     def __init__(self, class_weights: torch.Tensor, gamma: float = 2.0):

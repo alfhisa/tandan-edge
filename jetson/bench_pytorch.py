@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 bench_pytorch.py — PyTorch (standard practice) speed on the Jetson Nano,
-the baseline against which the TensorRT engines are compared (Table 7, Fig. 5).
+the baseline against which the TensorRT engines are compared.
 
 Two measurements per resolution (640/704/768) x precision (FP32/FP16):
   1. model_only : forward pass of the fused model only (comparable to the
@@ -83,11 +83,11 @@ def main():
     rows = []
     for half in (False, True):
         prec = "fp16" if half else "fp32"
-        # model-only: modul nn yang sudah di-fuse (Conv+BN), mode eval
+        # model only: fused nn module (Conv+BN), eval mode
         net = YOLO(a.weights).model.fuse().cuda().eval()
         if half:
             net = net.half()
-        yolo = YOLO(a.weights)  # objek terpisah untuk predict()
+        yolo = YOLO(a.weights)  # separate object for predict()
         for s in a.sizes:
             t_m = bench_model_only(net, s, half, a.warmup, a.iters)
             t_e = bench_end_to_end(yolo, img, s, half, 10, a.e2e_iters)
@@ -110,7 +110,7 @@ def main():
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
-    print("\nSelesai ->", a.out)
+    print("\nDone ->", a.out)
 
 
 if __name__ == "__main__":

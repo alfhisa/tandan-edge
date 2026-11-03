@@ -1,27 +1,11 @@
 """
-spd_conv.py — Space-to-Depth Convolution (SPD-Conv)
-====================================================
-Reference:
-  Sunkara & Luo (2022), "No More Strided Convolutions or Pooling: A New CNN
-  Building Block for Low-Resolution Images and Small Objects", ECML PKDD 2022.
+spd_conv.py — Space-to-Depth convolution (SPD-Conv, A1).
 
-Motivation (TANDAN / Journal 1):
-  Strided convolution discards half the spatial pixels at each downsampling
-  stage. For oil palm trees appearing as small objects in high-altitude UAV
-  imagery (20-62 px footprint at 425m AGL, 8cm/px GSD), this loss is
-  destructive. SPD-Conv rearranges spatial information into channel depth
-  instead of discarding it -- no pixel is lost during downsampling.
+Replaces a strided downsampling conv with a space-to-depth rearrangement
+followed by a non-strided conv, so no pixels are discarded. Drop-in for
+`Conv(c, k, 2)` in the YOLOv12n backbone.
 
-Mechanism:
-  1. Space-to-Depth: [B, C, H, W] -> [B, 4C, H/2, W/2]
-     (fold each 2x2 spatial block into channel dimension)
-  2. Non-strided Conv: [B, 4C, H/2, W/2] -> [B, C_out, H/2, W/2]
-     (1x1 or 3x3 conv with stride=1 to adjust channels)
-
-This module is a drop-in replacement for `Conv(c, k, 2)` (strided conv) in
-the YOLOv12n backbone.
-
-Python 3.8 compatible (uses typing.List/typing.Optional, no `list[...]`).
+Reference: Sunkara & Luo, ECML PKDD 2022. Python 3.8 compatible.
 """
 
 from typing import Optional

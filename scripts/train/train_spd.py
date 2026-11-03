@@ -1,7 +1,6 @@
 """
 train_spd.py — A1: YOLO12n with SPD-Conv downsampling (3 seeds, 640 px)
 =======================================================================
-(originally `modifications/scripts/train_ablation.py`)
 
 Trains modified YOLO12n architectures with the same settings as the base
 models. Each run folder gets a config snapshot, metrics JSON and profiling.

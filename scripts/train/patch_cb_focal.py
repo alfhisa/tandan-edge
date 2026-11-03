@@ -1,17 +1,9 @@
 """
-patch_cb_focal.py — Inject Class-Balanced Focal Loss into v8DetectionLoss
-==========================================================================
-Mengganti classification BCE di v8DetectionLoss dengan Class-Balanced
-Weighted Focal Loss (Tahap 1, Track A), TANPA menyentuh package ultralytics.
+patch_cb_focal.py — use the class-balanced focal loss in v8DetectionLoss (T1).
 
-Cara kerja (sama seperti VFL patch sebelumnya):
-  v8DetectionLoss.__call__ memanggil:
-      bce_loss = self.bce(pred_scores, target_scores)
-  self.bce diganti dengan ClassBalancedFocalLoss (signature & shape sama).
-  Kita wrap __init__ agar setelah init original, self.bce di-swap.
-
-Box loss (CIoU) dan DFL TETAP default YOLO11 -- tidak disentuh. Jadi hanya
-komponen klasifikasi yang dimodifikasi (sesuai desain jurnal).
+Wraps v8DetectionLoss.__init__ so that self.bce is replaced by
+ClassBalancedFocalLoss (same signature and output shape) without modifying
+the installed Ultralytics package. Box (CIoU) and DFL losses are unchanged.
 
 Usage:
     from patch_cb_focal import patch_cb_focal

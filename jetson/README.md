@@ -23,10 +23,10 @@ scp -r deploy/onnx <user>@<jetson>:~/tandan-edge/deploy/
 
 # on the Jetson (clone the repository there too), from the repository root
 sudo nvpmodel -m 0
-nohup bash jetson/benchmark_trt.sh > trt_run.log 2>&1 &          # Table 7: 9 engines, 30-60+ min
-nohup bash jetson/thermal_test.sh > thermal_run.log 2>&1 &       # Table 8: 30 min at 704 px FP16
-nohup bash jetson/benchmark_base_models.sh > base_run.log 2>&1 & # Table 4: 4 models @640 FP16
-python3 -u jetson/bench_pytorch.py                                # Table 7: PyTorch rows
+nohup bash jetson/benchmark_trt.sh > trt_run.log 2>&1 &          # 9 engines, 30-60+ min
+nohup bash jetson/thermal_test.sh > thermal_run.log 2>&1 &       # 30 min at 704 px FP16
+nohup bash jetson/benchmark_base_models.sh > base_run.log 2>&1 & # 4 base models @640 FP16
+python3 -u jetson/bench_pytorch.py                                # PyTorch baseline
 ```
 
 Engines are hardware- and TensorRT-version-specific, so they are rebuilt on the

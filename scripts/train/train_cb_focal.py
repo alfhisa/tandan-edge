@@ -1,7 +1,6 @@
 """
 train_cb_focal.py — T1: YOLO11n + class-balanced focal loss (3 seeds, 640 px)
 =============================================================================
-(originally `exp-journal-1/final_using_yolo11/scripts/train_lossmod.py`)
 
 Replaces the classification BCE with a class-balanced focal loss
 (effective-number weights, Cui et al. 2019). Box (CIoU) and DFL losses stay
@@ -9,7 +8,7 @@ at the YOLO11 defaults. Compared against the yolo11n_seed* base runs.
 
 Usage (from the repository root):
   python scripts/train/train_cb_focal.py --seeds 42 --epochs 1   # smoke test
-  python scripts/train/train_cb_focal.py                         # 3 seeds (paper)
+  python scripts/train/train_cb_focal.py                         # 3 seeds (reported runs)
   python scripts/train/train_cb_focal.py --beta 0.999 --gamma 2.0
 
 Output: runs/T1_lossmod_seed{42,123,456}/
@@ -147,7 +146,7 @@ def run_single(seed, epochs, beta, gamma):
 
     run_name = f"T1_lossmod_seed{seed}"
     run_dir = RUNS_DIR / run_name
-    print(f"\n{'#'*72}\n  TAHAP 1 — Track A: CB-Focal Loss (Cui beta={beta}, gamma={gamma})")
+    print(f"\n{'#'*72}\n  T1: CB-Focal Loss (Cui beta={beta}, gamma={gamma})")
     print(f"  Run: {run_name} | seed={seed} epochs={epochs}\n{'#'*72}\n")
 
     # Patch CB-Focal BEFORE building/training
@@ -188,7 +187,7 @@ def main():
     ap.add_argument("--gamma", type=float, default=2.0)
     args = ap.parse_args()
 
-    print_section("TAHAP 1 — TRACK A: CLASS-BALANCED FOCAL LOSS")
+    print_section("T1: CLASS-BALANCED FOCAL LOSS")
     print(f"  Seeds: {args.seeds} | Epochs: {args.epochs}")
     print(f"  Cui beta: {args.beta} | Focal gamma: {args.gamma}")
     if not DATASET_YAML.exists():
@@ -206,7 +205,7 @@ def main():
             import traceback; traceback.print_exc()
 
     if runs:
-        print_section("SUMMARY — TAHAP 1 (Track A)")
+        print_section("SUMMARY — T1")
         print(f"  {'Seed':<8}{'mAP50-95':>10}{'min_recall':>12}{'min_AP50':>10}")
         for r in runs:
             print(f"  {r['seed']:<8}{r['macro_mAP50_95']:>10.4f}"
@@ -217,8 +216,8 @@ def main():
             mr = [r["minority_recall"] for r in runs]
             print(f"\n  mAP50-95 mean±std: {statistics.mean(m):.4f} ± {statistics.stdev(m):.4f}")
             print(f"  min_recall mean±std: {statistics.mean(mr):.4f} ± {statistics.stdev(mr):.4f}")
-        print(f"\n  COMPARE vs Tahap 0 baseline (jalankan train_baseline dulu)")
-        print(f"  H1: loss-mod menaikkan minority-class metrics vs baseline")
+        print(f"\n  COMPARE with the yolo11n base runs (run train_base_models.py first)")
+        print(f"  H1: the loss change improves minority-class metrics over the base runs")
 
 
 if __name__ == "__main__":

@@ -1,31 +1,11 @@
 """
-tandan_simam.py — SimAM + C3k2SimAM (R2)
-=========================================
-Komponen K1 dari TANDAN-YOLO: attention PARAMETER-FREE di dalam bottleneck
-C3k2 backbone.
+tandan_simam.py — SimAM and C3k2SimAM (R2).
 
-SimAM (Yang et al., ICML 2021) menurunkan bobot attention 3D dari energy
-function berbasis "spatial inhibition" neuroscience — TANPA parameter
-belajar sama sekali:
+Parameter-free 3D attention (SimAM) added after each bottleneck unit of the
+C3k2 blocks in the backbone. Uses only element-wise ops, so it adds no
+parameters and stays compatible with ONNX opset 12 and TensorRT 8.2.
 
-    e_t* = 4(sigma^2 + lambda) / ((t - mu)^2 + 2 sigma^2 + 2 lambda)
-    X~   = sigmoid(1 / e_t*) . X
-
-Implementasi memakai mean/pow/sum/div/sigmoid/mul saja -> semua op standar,
-aman untuk ONNX opset 12 dan TensorRT 8.2 di Maxwell (tidak ada matmul QKV,
-tidak ada softmax spatial, tidak ada fragmentasi channel).
-
-Kontras dengan A2C2f YOLO12n yang gugur di Maxwell: SimAM tidak menambah
-parameter maupun memory-bound matmul, hanya elementwise pass.
-
-Penempatan mengikuti pola attn=True bawaan C3k2 (Bottleneck -> modul
-attention), tapi PSABlock diganti SimAM yang jauh lebih murah.
-
-Referensi: Yang et al., "SimAM: A Simple, Parameter-Free Attention Module
-for Convolutional Neural Networks", ICML 2021. Adopsi di YOLO11: C3k2SA
-(MDPI Electronics 2025), EDGE-MSE-YOLOv11 (Frontiers Plant Sci 2025).
-
-Python 3.8 compatible.
+Reference: Yang et al., SimAM, ICML 2021. Python 3.8 compatible.
 """
 
 import torch
@@ -41,10 +21,10 @@ except Exception:  # pragma: no cover
 
 class SimAM(nn.Module):
     """
-    Parameter-free 3D attention (ICML 2021).
+    Parameter-free 3D attention (Yang et al., ICML 2021).
 
     Args:
-        e_lambda: stabilizer pada denominator (default 1e-4 sesuai paper)
+        e_lambda: stabiliser in the denominator (default 1e-4, as in the SimAM paper)
     """
 
     def __init__(self, e_lambda: float = 1e-4):
@@ -57,7 +37,7 @@ class SimAM(nn.Module):
         n = w * h - 1
         # (t - mu)^2 per channel
         d = (x - x.mean(dim=[2, 3], keepdim=True)).pow(2)
-        # v = sigma^2 (unbiased-ish, sesuai implementasi resmi)
+        # v = sigma^2 (as in the official implementation)
         v = d.sum(dim=[2, 3], keepdim=True) / n
         e_inv = d / (4 * (v + self.e_lambda)) + 0.5
         return x * self.act(e_inv)
@@ -65,10 +45,10 @@ class SimAM(nn.Module):
 
 class C3k2SimAM(C3k2):
     """
-    C3k2 dengan SimAM di ujung tiap unit bottleneck.
+    C3k2 with SimAM after each bottleneck unit.
 
-    Signature identik C3k2 (c1, c2, n, c3k, e, attn, g, shortcut) agar
-    drop-in di YAML dan kompatibel dengan parse_model.
+    Same signature as C3k2 (c1, c2, n, c3k, e, attn, g, shortcut), so it is a
+    drop-in replacement in model YAMLs.
 
     YAML usage:
         - [-1, 2, C3k2SimAM, [256, False, 0.25]]
@@ -88,9 +68,9 @@ class C3k2SimAM(C3k2):
     ):
         super().__init__(c1, c2, n, c3k, e, attn, g, shortcut)
         if Bottleneck is None:
-            raise ImportError("Ultralytics block modules tidak tersedia.")
+            raise ImportError("Ultralytics block modules are not available.")
 
-        # Bungkus tiap unit dengan SimAM (0 parameter tambahan)
+        # Wrap each unit with SimAM (no extra parameters)
         if not attn:
             self.m = nn.ModuleList(
                 nn.Sequential(
@@ -111,10 +91,10 @@ if __name__ == "__main__":
     assert y.shape == x.shape
     n_params = sum(p.numel() for p in sa.parameters())
     print(f"  output shape: {tuple(y.shape)} | params: {n_params} (expect 0)")
-    assert n_params == 0, "SimAM harus parameter-free"
+    assert n_params == 0, "SimAM must be parameter-free"
 
     if Bottleneck is None:
-        print("\nultralytics tidak tersedia -- test C3k2SimAM dilewati.")
+        print("\nUltralytics is not available -- C3k2SimAM test skipped.")
     else:
         print("\nTesting C3k2SimAM...")
         for c3k in (False, True):
@@ -126,13 +106,13 @@ if __name__ == "__main__":
             assert yo.shape == (1, 128, 40, 40)
             yo.sum().backward()
 
-        # Bandingkan params dengan C3k2 asli (harus IDENTIK)
+        # Compare parameter count with the original C3k2 (must be identical)
         base = C3k2(64, 128, n=2, c3k=False, e=0.5)
         mod = C3k2SimAM(64, 128, n=2, c3k=False, e=0.5)
         pb = sum(p.numel() for p in base.parameters())
         pm = sum(p.numel() for p in mod.parameters())
         print(f"\n  C3k2 params    : {pb:,}")
-        print(f"  C3k2SimAM      : {pm:,}  (selisih {pm - pb} -> harus 0)")
-        assert pb == pm, "SimAM tidak boleh menambah parameter"
+        print(f"  C3k2SimAM      : {pm:,}  (difference {pm - pb}, must be 0)")
+        assert pb == pm, "SimAM must not add parameters"
 
     print("\nAll tests passed.")

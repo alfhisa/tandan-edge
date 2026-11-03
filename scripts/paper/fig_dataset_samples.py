@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-fig_dataset_samples.py — Fig. 2b: annotated samples of MOPAD Site 2
+fig_dataset_samples.py — annotated samples of MOPAD Site 2
 
 Panel (a): one full UAV tile with every bounding box (coloured by class),
            showing tree density and object scale.
@@ -38,7 +38,7 @@ from PIL import Image, ImageDraw
 
 CLASSES = ["dead", "healthy", "mismanaged", "smallish", "yellowish"]
 LABELS = ["Dead", "Healthy", "Mismanaged", "Smallish", "Yellowish"]
-COLORS = ["#d62728", "#2ca02c", "#ff7f0e", "#1f77b4", "#e6c619"]  # merah, hijau, oranye, biru, kuning
+COLORS = ["#d62728", "#2ca02c", "#ff7f0e", "#1f77b4", "#e6c619"]  # red, green, orange, blue, yellow
 
 
 def hex2rgb(h):
@@ -48,12 +48,12 @@ def hex2rgb(h):
 
 RGB = [hex2rgb(c) for c in COLORS]
 
-# Ketebalan garis bbox (piksel; tile dirender 1400 px, crop 220 px)
+# Box line widths in pixels (tile rendered at 1400 px, crops at 220 px)
 LW_TILE, LW_CTX, LW_TARGET = 7, 3, 8
 
 
 def read_labels(lbl_path, W, H):
-    """YOLO txt -> list of (cls, x1, y1, x2, y2) dalam piksel."""
+    """YOLO txt -> list of (cls, x1, y1, x2, y2) in pixels."""
     out = []
     if not os.path.isfile(lbl_path):
         return out
@@ -122,13 +122,13 @@ def main():
     ap.add_argument("--per-class", type=int, default=4)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--tile", default=None)
-    ap.add_argument("--context", type=float, default=2.6, help="sisi crop = context x sisi bbox terpanjang")
-    ap.add_argument("--min-size", type=float, default=14, help="abaikan objek < px ini")
+    ap.add_argument("--context", type=float, default=2.6, help="crop side = context x longest box side")
+    ap.add_argument("--min-size", type=float, default=14, help="ignore objects smaller than this (px)")
     a = ap.parse_args()
     rnd = random.Random(a.seed)
     os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
 
-    # ---- indeks semua objek (train + val) ----
+    # ---- index every object (train + val) ----
     counts = Counter()
     objs = defaultdict(list)          # cls -> [(img_path, box_idx)]
     val_imgs = index_split(a.root, "val")
@@ -145,9 +145,9 @@ def main():
             w, h = x2 - x1, y2 - y1
             if min(w, h) >= a.min_size and x1 > 1 and y1 > 1 and x2 < W - 1 and y2 < H - 1:
                 objs[c].append((p, i))
-    print("Instance per kelas (train+val):", {CLASSES[k]: counts[k] for k in sorted(counts)})
+    print("Instances per class (train+val):", {CLASSES[k]: counts[k] for k in sorted(counts)})
 
-    # ---- panel (a): tile val dengan kelas paling beragam ----
+    # ---- panel (a): the val tile with the most diverse classes ----
     if a.tile:
         tile = [p for p in val_imgs + all_imgs if os.path.basename(p) == a.tile][0]
     else:
@@ -165,13 +165,13 @@ def main():
     tile_img = Image.open(tile).convert("RGB").resize((int(W * s), int(H * s)), Image.LANCZOS)
     tile_img = draw_boxes(tile_img, tile_boxes, s, width=LW_TILE)
 
-    # ---- panel (b): crop per kelas ----
+    # ---- panel (b): crops per class ----
     chosen = {}
     for c in range(len(CLASSES)):
         pool = list(objs[c])
         rnd.shuffle(pool)
         picked, used_imgs = [], set()
-        for p, i in pool:                      # utamakan citra berbeda
+        for p, i in pool:                      # prefer different images
             if p in used_imgs:
                 continue
             picked.append((p, i))
@@ -184,7 +184,7 @@ def main():
     n = a.per_class
     rows = len(CLASSES)
     fig_w, left, right, top, bottom, gap = 7.2, 0.008, 0.955, 0.935, 0.085, 0.04
-    cell = fig_w * (right - left) / (rows + n + gap * (n + 1))       # sisi sel (inci)
+    cell = fig_w * (right - left) / (rows + n + gap * (n + 1))       # cell side (inches)
     fig_h = cell * (rows + gap * (rows - 1)) / (top - bottom)
     fig = plt.figure(figsize=(fig_w, fig_h), dpi=300)
     gs = fig.add_gridspec(rows, 1 + n, width_ratios=[rows + gap * (rows - 1)] + [1] * n,
@@ -222,12 +222,12 @@ def main():
     fig.savefig(a.out + ".pdf")
     with open(a.out + "_selection.txt", "w") as f:
         f.write("seed=%d per_class=%d context=%.2f min_size=%.0f\n" % (a.seed, n, a.context, a.min_size))
-        f.write("panel_a_tile=%s (%dx%d, %d objek)\n" % (os.path.basename(tile), W, H, len(tile_boxes)))
+        f.write("panel_a_tile=%s (%dx%d, %d objects)\n" % (os.path.basename(tile), W, H, len(tile_boxes)))
         for c in range(len(CLASSES)):
             for p, i in chosen[c]:
                 f.write("%s\t%s\tbox_idx=%d\n" % (CLASSES[c], os.path.basename(p), i))
-    print("Tile panel (a):", os.path.basename(tile), "(%dx%d, %d objek)" % (W, H, len(tile_boxes)))
-    print("Selesai:", a.out + ".png", a.out + ".pdf", a.out + "_selection.txt")
+    print("Tile panel (a):", os.path.basename(tile), "(%dx%d, %d objects)" % (W, H, len(tile_boxes)))
+    print("Done:", a.out + ".png", a.out + ".pdf", a.out + "_selection.txt")
 
 
 if __name__ == "__main__":
