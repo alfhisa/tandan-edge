@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make_tables.py — Every data table of the paper, rebuilt from results/.
+make_tables.py — Every data table, rebuilt from results/.
 
 Output: results/tables/T*.csv + results/tables/ALL_TABLES.md
 

@@ -17,7 +17,7 @@ empty label file.
 Usage (from the repository root):
   python scripts/data/coco_to_yolo.py --src /path/to/MOPAD/site2 --out datasets/mopad_site2
 
-Check the printed counts against the dataset used in the paper (Site 2):
+Check the printed counts against the dataset used here (Site 2):
   images  train 1,803 / val 500
   boxes   train: dead 234, healthy 89,958, mismanaged 431, smallish 26,644, yellowish 1,473
           val total 32,846

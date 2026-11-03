@@ -6,7 +6,7 @@ train_tandan.py — YOLO11n runs R1–R6 (architecture screening + resolution st
 One script for every YOLO11n run built from a model YAML; COCO-pretrained
 yolo11n.pt weights are transferred where layer shapes match.
 
-Exact commands used for the paper (from the repository root):
+Exact commands used for the reported results (from the repository root):
 
   # R1-R3: architecture screening, 640 px, seed 42
   python scripts/train/train_tandan.py --config model_configs/tandan-r1-scshead.yaml --name R1_scshead

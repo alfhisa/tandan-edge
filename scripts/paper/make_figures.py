@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make_figures.py — Data figures of the paper, rebuilt from results/.
+make_figures.py — Data figures, rebuilt from results/.
 
 Output: results/figures/<name>.png (300 dpi) + .pdf
 

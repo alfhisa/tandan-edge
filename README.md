@@ -2,8 +2,9 @@
 
 **A resolution-decoupled training and deployment workflow for lightweight oil palm condition detectors on low-power edge hardware.**
 
-Code, configurations, per-run records and on-device measurements behind the
-MethodsX article *A resolution-decoupled training and deployment workflow for lightweight oil palm condition detectors on low-power edge hardware* (under review). Part of TANDAN
+Code, configurations, per-run records and on-device measurements for a
+resolution-decoupled training and deployment workflow for lightweight oil palm
+condition detectors on low-power edge hardware. Part of TANDAN
 (Technology for Affordable Near-field Drone-based Assessment of oil palm plantations).
 
 ![Graphical abstract](docs/graphical_abstract.png)
@@ -45,7 +46,7 @@ tandan-edge/
 │   ├── export/              ONNX export for TensorRT 8.2
 │   └── paper/               rebuild every data table and figure from results/
 ├── jetson/                  TensorRT, PyTorch and thermal benchmarks on the Jetson Nano
-├── results/                 the numbers reported in the paper (see "Where each number comes from")
+├── results/                 all reported numbers (see "Where each number comes from")
 ├── weights/                 checkpoints (final model included; also attached to the release)
 └── docs/
 ```
@@ -104,7 +105,7 @@ model = YOLO("weights/tandan-edge_yolo11n_train768.pt")
 model.predict("tile.jpg", imgsz=704, conf=0.25, save=True)   # 704 px = deployed resolution
 ```
 
-## Reproduce the paper
+## Reproduce the results
 
 Training settings for every run: 150 epochs, early-stopping patience 50,
 batch 16, optimizer `auto` (SGD, lr0 0.01), AMP, COCO-pretrained weights,
@@ -143,7 +144,7 @@ python scripts/eval/train_infer_matrix.py    # 3 training x 3 inference resoluti
 ```
 Both overwrite the CSVs in `results/reeval/`, so `git diff results/` shows any
 difference from the published values. The accuracy values that Ultralytics
-logs during training (`results.csv`) are not used in the paper.
+logs during training (`results.csv`) are not used for any reported number.
 
 **5. Export and on-device benchmarks** (Tables 4, 7, 8; Figs. 5, 6) — see [`jetson/README.md`](jetson/README.md)
 ```bash
@@ -203,7 +204,7 @@ repository.
 
 ## Citation
 
-If you use this code, please cite the article (see [`CITATION.cff`](CITATION.cff)) and the dataset:
+If you use this code, please cite it (see [`CITATION.cff`](CITATION.cff)) and the dataset:
 
 > Zheng, J., Fu, H., Li, W., Wu, W., Yu, L., Yuan, S., ... & Kanniah, K. D. (2021).
 > Growing status observation for oil palm trees using Unmanned Aerial Vehicle (UAV)

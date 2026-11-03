@@ -7,7 +7,7 @@ Static input, batch 1, opset 12, onnxsim — the settings that TensorRT 8.2
 (JetPack 4.6) accepts. One ONNX file per inference resolution, because the
 TensorRT engines are built with a fixed input size.
 
-For the paper the weights were R4_res768_seed42 (trained at 768 px) and the
+For the reported results the weights were R4_res768_seed42 (trained at 768 px) and the
 files were exported at 640, 704 and 768 px and copied to the Jetson as
 best_640.onnx, best_704.onnx and best_768.onnx (the names expected by
 jetson/benchmark_trt.sh).

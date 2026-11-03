@@ -5,7 +5,7 @@ train_repc3k2.py — T2: YOLO11n with C3k2 -> RepC3k2 in the backbone (640 px)
 
 Hypothesis tested: a re-parameterisable block (multi-branch in training,
 single conv after fuse) raises mAP at identical inference cost.
-Default is one seed (screening filter), as reported in the paper.
+Default is one seed (screening filter), as in the reported results.
 
 Usage (from the repository root):
   python scripts/train/train_repc3k2.py --seeds 42 --epochs 1   # smoke test

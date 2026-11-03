@@ -2,7 +2,7 @@
 """
 reeval_all.py — Re-evaluate every trained run with ONE protocol.
 
-This is the single source of the accuracy numbers in the paper
+This is the single source of all reported accuracy numbers
 (results/reeval/reeval_runs.csv and reeval_summary.csv); the values that
 Ultralytics logs during training (results.csv) are not used.
 
