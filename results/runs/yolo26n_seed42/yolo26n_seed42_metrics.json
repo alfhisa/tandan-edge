@@ -1,0 +1,60 @@
+{
+  "run_name": "yolo26n_seed42",
+  "model": "yolo26n",
+  "seed": 42,
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9943,
+  "macro_mAP50_95": 0.9455,
+  "minority_recall": 0.9873,
+  "minority_AP50": 0.9941,
+  "profile": {
+    "model_size_mb": 5.4,
+    "params_M": 2.376,
+    "GFLOPs": 5.19,
+    "gpu_latency_ms": 8.35,
+    "gpu_fps": 119.8,
+    "gpu_device": "Quadro RTX 6000"
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.9947,
+      "AP@.5:.95": 0.9505,
+      "Precision": 0.9682,
+      "Recall": 0.9972
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.9948,
+      "AP@.5:.95": 0.9822,
+      "Precision": 0.9909,
+      "Recall": 0.9946
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.9938,
+      "AP@.5:.95": 0.8806,
+      "Precision": 0.9692,
+      "Recall": 0.9789
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9945,
+      "AP@.5:.95": 0.9412,
+      "Precision": 0.9876,
+      "Recall": 0.991
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9939,
+      "AP@.5:.95": 0.9729,
+      "Precision": 0.9759,
+      "Recall": 0.9859
+    }
+  ]
+}

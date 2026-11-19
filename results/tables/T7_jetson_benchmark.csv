@@ -1,0 +1,16 @@
+Resolution,Runtime,Precision,Throughput (FPS),GPU latency (ms),End-to-end FPS,Engine (MB),Build time (s),Speed-up vs PyTorch FP32
+640,PyTorch,FP32,6.16,162.3,4.72,—,—,1.0×
+640,PyTorch,FP16,5.71,175.1,4.47,—,—,0.9×
+640,TensorRT,FP32,15.52,63.9,—,17,413,2.5×
+640,TensorRT,FP16,20.18,49.0,—,10,830,3.3×
+640,TensorRT,INT8*,15.53,63.9,—,18,682,2.5×
+704,PyTorch,FP32,5.10,196.1,4.04,—,—,1.0×
+704,PyTorch,FP16,4.85,206.0,3.90,—,—,1.0×
+704,TensorRT,FP32,13.14,75.4,—,19,434,2.6×
+704,TensorRT,FP16,17.02,58.1,—,11,879,3.3×
+704,TensorRT,INT8*,13.17,75.3,—,20,748,2.6×
+768,PyTorch,FP32,4.24,235.7,3.44,—,—,1.0×
+768,PyTorch,FP16,4.10,244.1,3.39,—,—,1.0×
+768,TensorRT,FP32,11.21,88.4,—,20,412,2.6×
+768,TensorRT,FP16,14.52,68.1,—,12,846,3.4×
+768,TensorRT,INT8*,11.21,88.5,—,20,654,2.6×

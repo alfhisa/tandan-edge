@@ -1,0 +1,72 @@
+{
+  "experiment": "R6_adamw768",
+  "run_name": "R6_adamw768_seed42",
+  "seed": 42,
+  "epochs": 150,
+  "imgsz": 768,
+  "config": "yolo11n-base.yaml",
+  "optimizer": "AdamW",
+  "lr0": 0.001,
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9941,
+  "macro_mAP50_95": 0.965,
+  "minority_recall": 0.9992,
+  "minority_AP50": 0.9937,
+  "export_onnx_ok": true,
+  "background_fp": {
+    "bg_fp_total_abs": 489.0,
+    "bg_as_dead_frac": 0.006134969325153374,
+    "bg_as_healthy_frac": 0.588957055214724,
+    "bg_as_mismanaged_frac": 0.014314928425357873,
+    "bg_as_smallish_frac": 0.3660531697341513,
+    "bg_as_yellowish_frac": 0.024539877300613498,
+    "dominant_fp_class": "healthy"
+  },
+  "profile": {
+    "params_M": 2.583,
+    "GFLOPs": 9.1,
+    "gpu_fps": 152.6
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.9935,
+      "AP@.5:.95": 0.9813,
+      "Precision": 0.9782,
+      "Recall": 1.0
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.995,
+      "AP@.5:.95": 0.99,
+      "Precision": 0.9967,
+      "Recall": 0.9958
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.993,
+      "AP@.5:.95": 0.9054,
+      "Precision": 0.9679,
+      "Recall": 1.0
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9945,
+      "AP@.5:.95": 0.9627,
+      "Precision": 0.9907,
+      "Recall": 0.9942
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9947,
+      "AP@.5:.95": 0.9854,
+      "Precision": 0.9785,
+      "Recall": 0.9976
+    }
+  ]
+}

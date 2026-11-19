@@ -1,0 +1,22 @@
+# data and generated outputs
+/datasets/
+/runs/
+/deploy/
+results/figures/
+results/reeval/log/
+*.pt
+*.onnx
+*.engine
+!weights/README.md
+!weights/tandan-edge_yolo11n_train768.pt
+!weights/tandan-edge_yolo11n_train768_704.onnx
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# os
+.DS_Store

@@ -1,0 +1,12 @@
+Stage,Component,Specification
+Training / evaluation,GPU,NVIDIA Quadro RTX 6000 (24 GB)
+Training / evaluation,Driver / CUDA,450.248 / CUDA 11.7 runtime (PyTorch wheel)
+Training / evaluation,Python,3.8.10
+Training / evaluation,PyTorch / torchvision,2.0.1+cu117 / 0.15.2
+Training / evaluation,Ultralytics,8.4.48
+Edge device,Board,"NVIDIA Jetson Nano Developer Kit 4 GB (Maxwell GPU, 128 CUDA cores)"
+Edge device,OS / JetPack,L4T R32.7.6 / JetPack 4.6.6
+Edge device,CUDA / cuDNN,10.2.460 / 8.2.1
+Edge device,TensorRT,8.2.1 (trtexec)
+Edge device,PyTorch / Ultralytics,1.11.0 / 8.3.152 (Python 3.8)
+Edge device,Power mode,"nvpmodel 0 (MAXN, 10 W); jetson_clocks not enabled"

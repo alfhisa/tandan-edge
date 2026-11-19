@@ -1,0 +1,10 @@
+Change,Component,Base,Seeds,mAP50-95,Δ vs base,p (Welch),AP50-95 mismanaged,Background FP,GFLOPs,Decision
+SPD-Conv downsampling,Backbone,YOLO12n,3,0.9693 ± 0.0049,-0.0003,0.916,0.9215,451,9.86,"Not adopted: no significant difference, +56% GFLOPs"
+Varifocal Loss,Loss,YOLO12n,3,0.9738 ± 0.0020,+0.0042,0.100,0.9314,1531,6.32,"Not adopted: no significant difference, background FP ×3.5"
+A2C2f → A2C2fRep (attention removed),Backbone,YOLO12n,3,0.9553 ± 0.0062,-0.0143,0.041,0.8892,535,6.79,Not adopted: significant loss
+Class-balanced focal loss,Loss,YOLO11n,3,0.9529 ± 0.0052,-0.0090,0.080,0.8825,1950,6.32,"Not adopted: no significant difference, background FP ×3.8"
+RepC3k2 (re-parameterisation),Backbone,YOLO11n,1,0.9595,-0.0024,,0.8869,384,6.32,Not adopted: accuracy loss (single seed)
+SCS-Head,Head,YOLO11n,1,0.9258,-0.0361,,0.8018,643,6.03,Not adopted: accuracy loss (single seed)
+SimAM attention,Backbone,YOLO11n,1,0.9501,-0.0118,,0.8559,664,6.32,Not adopted: accuracy loss (single seed)
+BiFPN weighted fusion,Neck,YOLO11n,1,0.9596,-0.0023,,0.8768,403,6.32,Not adopted: within seed noise (single seed)
+AdamW (lr0 0.001) instead of auto,Optimiser,YOLO11n @768,1,0.9613,-0.0102,,0.9054,481,9.1,Not adopted: accuracy loss (single seed)

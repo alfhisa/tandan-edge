@@ -1,0 +1,30 @@
+======================================================================
+  RINGKASAN FASE 5 — THERMAL & SUSTAINED INFERENCE
+======================================================================
+
+--- Baseline IDLE (n=10 sampel) ---
+  temp_GPU        : 23.1C (min 21.0, max 24.5)
+  temp_CPU        : 21.4C (min 21.0, max 23.0)
+  temp_thermal    : 22.7C (min 21.5, max 24.0)
+  temp_PMIC       : 50.0C (min 50.0, max 50.0)
+
+--- Selama STRESS (n=316 sampel) ---
+  temp_GPU        : awal=21.5C  akhir=30.5C  mean=31.2C  max=35.0C  delta(akhir-awal)=+9.0C
+  temp_CPU        : awal=21.5C  akhir=31.5C  mean=31.5C  max=36.5C  delta(akhir-awal)=+10.0C
+  temp_thermal    : awal=22.5C  akhir=32.0C  mean=31.3C  max=35.5C  delta(akhir-awal)=+9.5C
+  temp_PMIC       : awal=50.0C  akhir=50.0C  mean=50.0C  max=50.0C  delta(akhir-awal)=+0.0C
+
+  [catatan] VDD_IN/power tidak tersedia pada model tegrastats ini -- umum terjadi pada Jetson Nano dev kit (tanpa sensor daya on-board). Konsumsi daya tidak dapat diukur langsung dari tegrastats; power supply eksternal (USB power meter) diperlukan jika angka watt eksplisit dibutuhkan untuk laporan.
+
+  GR3D_FREQ (util GPU): mean=94%  min=0%  max=99%
+  Util paruh-1=89% vs paruh-2=98% (selisih -8.4 poin)
+  >> Tidak ada indikasi throttling berbasis utilisasi GPU.
+
+--- Throughput trtexec (durasi diminta: lihat log) ---
+  Throughput dilaporkan: 17.0025 qps
+  GPU Compute Time mean: 58.1714 ms
+
+======================================================================
+  INTERPRETASI
+======================================================================
+  Suhu GPU naik +9.0C selama stress test -- signifikan, perlu diperhatikan untuk penerbangan berdurasi lebih panjang dari 316s.

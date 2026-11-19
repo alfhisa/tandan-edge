@@ -1,0 +1,11 @@
+# Jetson Nano 4 GB (only needed for jetson/bench_pytorch.py)
+# L4T R32.7.6 / JetPack 4.6.6, CUDA 10.2, cuDNN 8.2.1, TensorRT 8.2.1 (trtexec)
+# Python 3.8 virtual environment with the community PyTorch 1.11.0 aarch64 wheel
+# (built for JetPack 4.6 / Python 3.8; not available on PyPI), then:
+#   pip install -r requirements-jetson.txt
+#
+# The TensorRT benchmarks (benchmark_trt.sh, thermal_test.sh) need only trtexec,
+# which ships with JetPack at /usr/src/tensorrt/bin/trtexec.
+
+ultralytics==8.3.152
+numpy

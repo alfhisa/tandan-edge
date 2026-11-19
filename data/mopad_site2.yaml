@@ -1,0 +1,22 @@
+# MOPAD Site 2, YOLO format (template)
+# Source: https://github.com/rs-dl/MOPAD (Zheng et al., 2021), converted with
+# scripts/data/coco_to_yolo.py
+#
+# The scripts do not read this file directly: tandan_paths.py writes an
+# equivalent file with an absolute dataset path to runs/_data/mopad_site2.yaml.
+# Put the dataset in <repo>/datasets/mopad_site2/ or set TANDAN_DATA.
+#
+# Train-set instances: dead 234 | healthy 89,958 | mismanaged 431 |
+# smallish 26,644 | yellowish 1,473  (imbalance ~384:1)
+# Images: 1,803 train / 500 val, 1024 x 1024 px tiles
+
+path: ../datasets/mopad_site2
+train: train/images
+val: val/images
+
+names:
+  0: dead
+  1: healthy
+  2: mismanaged
+  3: smallish
+  4: yellowish

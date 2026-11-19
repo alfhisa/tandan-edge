@@ -1,0 +1,110 @@
+&&&& RUNNING TensorRT.trtexec [TensorRT v8201] # /usr/src/tensorrt/bin/trtexec --onnx=yolo26n_640.onnx --fp16 --workspace=1024 --saveEngine=yolo26n_640_fp16.engine --warmUp=2000 --duration=60
+[10/27/2026-14:24:36] [I] === Model Options ===
+[10/27/2026-14:24:36] [I] Format: ONNX
+[10/27/2026-14:24:36] [I] Model: yolo26n_640.onnx
+[10/27/2026-14:24:36] [I] Output:
+[10/27/2026-14:24:36] [I] === Build Options ===
+[10/27/2026-14:24:36] [I] Max batch: explicit batch
+[10/27/2026-14:24:36] [I] Workspace: 1024 MiB
+[10/27/2026-14:24:36] [I] minTiming: 1
+[10/27/2026-14:24:36] [I] avgTiming: 8
+[10/27/2026-14:24:36] [I] Precision: FP32+FP16
+[10/27/2026-14:24:36] [I] Calibration: 
+[10/27/2026-14:24:36] [I] Refit: Disabled
+[10/27/2026-14:24:36] [I] Sparsity: Disabled
+[10/27/2026-14:24:36] [I] Safe mode: Disabled
+[10/27/2026-14:24:36] [I] DirectIO mode: Disabled
+[10/27/2026-14:24:36] [I] Restricted mode: Disabled
+[10/27/2026-14:24:36] [I] Save engine: yolo26n_640_fp16.engine
+[10/27/2026-14:24:36] [I] Load engine: 
+[10/27/2026-14:24:36] [I] Profiling verbosity: 0
+[10/27/2026-14:24:36] [I] Tactic sources: Using default tactic sources
+[10/27/2026-14:24:36] [I] timingCacheMode: local
+[10/27/2026-14:24:36] [I] timingCacheFile: 
+[10/27/2026-14:24:36] [I] Input(s)s format: fp32:CHW
+[10/27/2026-14:24:36] [I] Output(s)s format: fp32:CHW
+[10/27/2026-14:24:36] [I] Input build shapes: model
+[10/27/2026-14:24:36] [I] Input calibration shapes: model
+[10/27/2026-14:24:36] [I] === System Options ===
+[10/27/2026-14:24:36] [I] Device: 0
+[10/27/2026-14:24:36] [I] DLACore: 
+[10/27/2026-14:24:36] [I] Plugins:
+[10/27/2026-14:24:36] [I] === Inference Options ===
+[10/27/2026-14:24:36] [I] Batch: Explicit
+[10/27/2026-14:24:36] [I] Input inference shapes: model
+[10/27/2026-14:24:36] [I] Iterations: 10
+[10/27/2026-14:24:36] [I] Duration: 60s (+ 2000ms warm up)
+[10/27/2026-14:24:36] [I] Sleep time: 0ms
+[10/27/2026-14:24:36] [I] Idle time: 0ms
+[10/27/2026-14:24:36] [I] Streams: 1
+[10/27/2026-14:24:36] [I] ExposeDMA: Disabled
+[10/27/2026-14:24:36] [I] Data transfers: Enabled
+[10/27/2026-14:24:36] [I] Spin-wait: Disabled
+[10/27/2026-14:24:36] [I] Multithreading: Disabled
+[10/27/2026-14:24:36] [I] CUDA Graph: Disabled
+[10/27/2026-14:24:36] [I] Separate profiling: Disabled
+[10/27/2026-14:24:36] [I] Time Deserialize: Disabled
+[10/27/2026-14:24:36] [I] Time Refit: Disabled
+[10/27/2026-14:24:36] [I] Skip inference: Disabled
+[10/27/2026-14:24:36] [I] Inputs:
+[10/27/2026-14:24:36] [I] === Reporting Options ===
+[10/27/2026-14:24:36] [I] Verbose: Disabled
+[10/27/2026-14:24:36] [I] Averages: 10 inferences
+[10/27/2026-14:24:36] [I] Percentile: 99
+[10/27/2026-14:24:36] [I] Dump refittable layers:Disabled
+[10/27/2026-14:24:36] [I] Dump output: Disabled
+[10/27/2026-14:24:36] [I] Profile: Disabled
+[10/27/2026-14:24:36] [I] Export timing to JSON file: 
+[10/27/2026-14:24:36] [I] Export output to JSON file: 
+[10/27/2026-14:24:36] [I] Export profile to JSON file: 
+[10/27/2026-14:24:36] [I] 
+[10/27/2026-14:24:36] [I] === Device Information ===
+[10/27/2026-14:24:36] [I] Selected Device: NVIDIA Tegra X1
+[10/27/2026-14:24:36] [I] Compute Capability: 5.3
+[10/27/2026-14:24:36] [I] SMs: 1
+[10/27/2026-14:24:36] [I] Compute Clock Rate: 0.9216 GHz
+[10/27/2026-14:24:36] [I] Device Global Memory: 3960 MiB
+[10/27/2026-14:24:36] [I] Shared Memory per SM: 64 KiB
+[10/27/2026-14:24:36] [I] Memory Bus Width: 64 bits (ECC disabled)
+[10/27/2026-14:24:36] [I] Memory Clock Rate: 0.01275 GHz
+[10/27/2026-14:24:36] [I] 
+[10/27/2026-14:24:36] [I] TensorRT version: 8.2.1
+[10/27/2026-14:24:38] [I] [TRT] [MemUsageChange] Init CUDA: CPU +229, GPU +0, now: CPU 248, GPU 2336 (MiB)
+[10/27/2026-14:24:38] [I] [TRT] [MemUsageSnapshot] Begin constructing builder kernel library: CPU 248 MiB, GPU 2336 MiB
+[10/27/2026-14:24:38] [I] [TRT] [MemUsageSnapshot] End constructing builder kernel library: CPU 278 MiB, GPU 2364 MiB
+[10/27/2026-14:24:38] [I] Start parsing network model
+[10/27/2026-14:24:38] [I] [TRT] ----------------------------------------------------------------
+[10/27/2026-14:24:38] [I] [TRT] Input filename:   yolo26n_640.onnx
+[10/27/2026-14:24:38] [I] [TRT] ONNX IR version:  0.0.7
+[10/27/2026-14:24:38] [I] [TRT] Opset version:    12
+[10/27/2026-14:24:38] [I] [TRT] Producer name:    pytorch
+[10/27/2026-14:24:38] [I] [TRT] Producer version: 2.0.1
+[10/27/2026-14:24:38] [I] [TRT] Domain:           
+[10/27/2026-14:24:38] [I] [TRT] Model version:    0
+[10/27/2026-14:24:38] [I] [TRT] Doc string:       
+[10/27/2026-14:24:38] [I] [TRT] ----------------------------------------------------------------
+[10/27/2026-14:24:38] [W] [TRT] onnx2trt_utils.cpp:366: Your ONNX model has been generated with INT64 weights, while TensorRT does not natively support INT64. Attempting to cast down to INT32.
+[10/27/2026-14:24:38] [I] [TRT] No importer registered for op: Mod. Attempting to import as plugin.
+[10/27/2026-14:24:38] [I] [TRT] Searching for plugin: Mod, plugin_version: 1, plugin_namespace: 
+[10/27/2026-14:24:38] [E] [TRT] ModelImporter.cpp:773: While parsing node number 377 [Mod -> "/model.23/Mod_output_0"]:
+[10/27/2026-14:24:38] [E] [TRT] ModelImporter.cpp:774: --- Begin node ---
+[10/27/2026-14:24:38] [E] [TRT] ModelImporter.cpp:775: input: "/model.23/TopK_1_output_1"
+input: "/model.23/Constant_19_output_0"
+output: "/model.23/Mod_output_0"
+name: "/model.23/Mod"
+op_type: "Mod"
+attribute {
+  name: "fmod"
+  i: 0
+  type: INT
+}
+
+[10/27/2026-14:24:38] [E] [TRT] ModelImporter.cpp:776: --- End node ---
+[10/27/2026-14:24:38] [E] [TRT] ModelImporter.cpp:779: ERROR: builtin_op_importers.cpp:4870 In function importFallbackPluginImporter:
+[8] Assertion failed: creator && "Plugin not found, are the plugin name, version, and namespace correct?"
+[10/27/2026-14:24:38] [E] Failed to parse onnx file
+[10/27/2026-14:24:38] [I] Finish parsing network model
+[10/27/2026-14:24:38] [E] Parsing model failed
+[10/27/2026-14:24:38] [E] Failed to create engine from model.
+[10/27/2026-14:24:38] [E] Engine set up failed
+&&&& FAILED TensorRT.trtexec [TensorRT v8201] # /usr/src/tensorrt/bin/trtexec --onnx=yolo26n_640.onnx --fp16 --workspace=1024 --saveEngine=yolo26n_640_fp16.engine --warmUp=2000 --duration=60

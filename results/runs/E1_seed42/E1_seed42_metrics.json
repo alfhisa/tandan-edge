@@ -1,0 +1,61 @@
+{
+  "experiment": "E1",
+  "run_name": "E1_seed42",
+  "config": "yolo12n-rep-e1.yaml",
+  "seed": 42,
+  "epochs": 150,
+  "dataset": "site-2-only",
+  "macro_mAP50": 0.9859,
+  "macro_mAP50_95": 0.9535,
+  "minority_recall": 0.9872,
+  "minority_AP50": 0.9866,
+  "fuse_ok": true,
+  "profile": {
+    "model_size_mb": 6.4,
+    "params_M": 2.927,
+    "GFLOPs": 6.79,
+    "gpu_fps": 154.8
+  },
+  "per_class": [
+    {
+      "class": "dead",
+      "is_minority": true,
+      "AP@.5": 0.9847,
+      "AP@.5:.95": 0.9734,
+      "Precision": 0.9749,
+      "Recall": 0.9836
+    },
+    {
+      "class": "healthy",
+      "is_minority": false,
+      "AP@.5": 0.9849,
+      "AP@.5:.95": 0.9808,
+      "Precision": 0.9946,
+      "Recall": 0.9812
+    },
+    {
+      "class": "mismanaged",
+      "is_minority": true,
+      "AP@.5": 0.9907,
+      "AP@.5:.95": 0.8939,
+      "Precision": 0.9783,
+      "Recall": 1.0
+    },
+    {
+      "class": "smallish",
+      "is_minority": false,
+      "AP@.5": 0.9848,
+      "AP@.5:.95": 0.9493,
+      "Precision": 0.9967,
+      "Recall": 0.9749
+    },
+    {
+      "class": "yellowish",
+      "is_minority": true,
+      "AP@.5": 0.9843,
+      "AP@.5:.95": 0.9702,
+      "Precision": 0.9878,
+      "Recall": 0.9781
+    }
+  ]
+}

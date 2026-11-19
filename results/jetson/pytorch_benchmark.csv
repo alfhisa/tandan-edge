@@ -1,0 +1,7 @@
+framework,resolution,precision,model_mean_ms,model_median_ms,model_p95_ms,model_fps,e2e_mean_ms,e2e_fps
+pytorch,640,fp32,162.33,162.2,163.43,6.16,211.91,4.72
+pytorch,704,fp32,196.1,195.95,197.31,5.1,247.74,4.04
+pytorch,768,fp32,235.69,235.59,236.85,4.24,290.52,3.44
+pytorch,640,fp16,175.11,174.9,176.33,5.71,223.57,4.47
+pytorch,704,fp16,206.04,204.55,211.94,4.85,256.43,3.9
+pytorch,768,fp16,244.12,240.93,259.98,4.1,295.01,3.39
